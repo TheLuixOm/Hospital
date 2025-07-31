@@ -4,8 +4,9 @@ import Navbar from './components/Navbar';
 import Inicio from './pages/Inicio';
 import LoginDoctor from './pages/login/LoginDoctor';
 import LoginPaciente from './pages/login/LoginPaciente';
-import Registro from './pages/registro/RegistroDoctor';
-import PanelDoctor from './pages/home/PanelDoctor'; // <- aún por crear
+import RegistroDoctor from './pages/registro/RegistroDoctor';
+import RegistroPaciente from './pages/registro/RegistroPaciente';
+import PanelDoctor from './pages/home/PanelDoctor';
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
         <Route path="/login-doctor" element={<LoginDoctor />} />
         <Route path="/login-paciente" element={<LoginPaciente />} />
 
-        {/* Registro general (si lo usas) */}
-        <Route path="/registro" element={<Registro />} />
+        {/* Registro */}
+        <Route path="/registro-doctor" element={<RegistroDoctor />} />
+        <Route path="/registro-paciente" element={<RegistroPaciente />} />
 
         {/* Página a la que redirige el doctor al iniciar sesión */}
         <Route path="/panel-doctor" element={<PanelDoctor />} />

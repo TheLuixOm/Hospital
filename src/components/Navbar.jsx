@@ -26,13 +26,13 @@ function Navbar() {
             <div style={styles.dropdownContent}>
               <button
                 style={styles.dropdownItem}
-                onClick={() => navigate('/registro?tipo=paciente')}
+                onClick={() => navigate('/registro-paciente')}
               >
                 Paciente
               </button>
               <button
                 style={styles.dropdownItem}
-                onClick={() => navigate('/registro?tipo=doctor')}
+                onClick={() => navigate('/registro-doctor')}
               >
                 Doctor
               </button>
