@@ -28,39 +28,49 @@ function RegistroPaciente() {
     }
   }
 
-  const handleFinalSubmit = (e) => {
-    e.preventDefault()
-
-    const datosPaciente = {
-      usuario,
-      correo,
-      nombre,
-      apellido,
-      cedula,
-      telefono,
-      fechaNacimiento,
-      tipoSangre,
-      alergias,
-      enfermedades,
-      direccion
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/paciente/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          usuario,
+          email: correo,
+          password: contrasena,
+          nombre,
+          apellido,
+          fechaNacimiento,
+          telefono,
+          cedula,
+          tipoSangre,
+          alergias,
+          enfermedades,
+          direccion
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Paciente registrado con éxito');
+        setPaso(1);
+        setUsuario('');
+        setCorreo('');
+        setContrasena('');
+        setNombre('');
+        setApellido('');
+        setCedula('');
+        setTelefono('');
+        setFechaNacimiento('');
+        setTipoSangre('');
+        setAlergias('');
+        setEnfermedades('');
+        setDireccion('');
+      } else {
+        alert(data.message || 'Error en el registro');
+      }
+    } catch (err) {
+      alert('Error de conexión con el servidor');
     }
-
-    console.log('Paciente registrado:', datosPaciente)
-    alert('Paciente registrado con éxito')
-
-    setPaso(1)
-    setUsuario('')
-    setCorreo('')
-    setContrasena('')
-    setNombre('')
-    setApellido('')
-    setCedula('')
-    setTelefono('')
-    setFechaNacimiento('')
-    setTipoSangre('')
-    setAlergias('')
-    setEnfermedades('')
-    setDireccion('')
   }
 
   return (

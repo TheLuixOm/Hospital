@@ -7,6 +7,7 @@ import LoginPaciente from './pages/login/LoginPaciente';
 import RegistroDoctor from './pages/registro/RegistroDoctor';
 import RegistroPaciente from './pages/registro/RegistroPaciente';
 import PanelDoctor from './pages/home/PanelDoctor';
+import PanelPaciente from './pages/home/PanelPaciente';
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
 
         {/* Página a la que redirige el doctor al iniciar sesión */}
         <Route path="/panel-doctor" element={<PanelDoctor />} />
+        {/* Página a la que redirige el paciente al iniciar sesión */}
+        <Route path="/panel-paciente" element={<PanelPaciente />} />
       </Routes>
     </Router>
   );

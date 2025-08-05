@@ -1,19 +1,41 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPaciente = () => {
   const [datos, setDatos] = useState({
     usuarioCorreo: '',
     contraseña: ''
   });
+  const navigate = useNavigate();
 
   const manejarCambio = (e) => {
     setDatos({ ...datos, [e.target.name]: e.target.value });
   };
 
-  const manejarEnvio = (e) => {
+  const manejarEnvio = async (e) => {
     e.preventDefault();
-    console.log('Iniciar sesión con:', datos);
-    // Aquí se integraría la lógica de autenticación
+    try {
+      const res = await fetch('http://localhost:5000/api/paciente/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          usuario: datos.usuarioCorreo,
+          email: datos.usuarioCorreo,
+          password: datos.contraseña
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Inicio de sesión exitoso');
+        setTimeout(() => {
+          navigate('/panel-paciente');
+        }, 1000);
+      } else {
+        alert(data.message || 'Usuario o contraseña incorrectos');
+      }
+    } catch (err) {
+      alert('Error de conexión con el servidor');
+    }
   };
 
   return (
