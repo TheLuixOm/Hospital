@@ -7,19 +7,29 @@ function LoginDoctor() {
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate(); 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const usuarioValido = 'doctor123';
-    const contrasenaValida = 'medico2025';
-
-    if (usuario === usuarioValido && contrasena === contrasenaValida) {
-      setMensaje('Inicio de sesión exitoso. Bienvenido Doctor.');
-      setTimeout(() => {
-        navigate('/panel-doctor'); 
-      }, 1000); 
-    } else {
-      setMensaje('Usuario o contraseña incorrectos.');
+    try {
+      const res = await fetch('http://localhost:5000/api/doctor/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          usuario: usuario,
+          email: usuario,
+          password: contrasena
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMensaje('Inicio de sesión exitoso. Bienvenido Doctor.');
+        setTimeout(() => {
+          navigate('/panel-doctor');
+        }, 1000);
+      } else {
+        setMensaje(data.message || 'Usuario o contraseña incorrectos.');
+      }
+    } catch (err) {
+      setMensaje('Error de conexión con el servidor');
     }
   };
 

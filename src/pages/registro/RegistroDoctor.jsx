@@ -19,11 +19,45 @@ function RegistroDoctor({ cambiarVista }) {
     });
   };
 
-  const manejarEnvio = (e) => {
+  const manejarEnvio = async (e) => {
     e.preventDefault();
-    console.log('Datos del doctor:', formulario);
-    alert('Registro exitoso');
-    cambiarVista('inicio');
+    try {
+      const res = await fetch('http://localhost:5000/api/doctor/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: formulario.nombre,
+          apellido: formulario.apellido,
+          usuario: formulario.usuario,
+          email: formulario.email,
+          password: formulario.contrasena,
+          certificacionId: formulario.idCertificacion
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Registro exitoso');
+        setFormulario({
+          nombre: '',
+          apellido: '',
+          fechaNacimiento: '',
+          email: '',
+          telefono: '',
+          usuario: '',
+          contrasena: '',
+          idCertificacion: ''
+        });
+        cambiarVista('inicio');
+      } else {
+        alert(data.message || 'Error en el registro');
+      }
+    } catch (err) {
+      if (!window.navigator.onLine) {
+        alert('No tienes conexión a internet.');
+      } else {
+        alert('Error de conexión con el servidor');
+      }
+    }
   };
 
   return (
