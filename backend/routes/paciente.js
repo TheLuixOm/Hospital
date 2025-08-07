@@ -1,8 +1,19 @@
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const Paciente = require('../models/Paciente');
 
 const router = express.Router();
+
+// Obtener todos los pacientes
+router.get('/all', async (req, res) => {
+  try {
+    const pacientes = await Paciente.find({}, '-password'); // No enviar contraseñas
+    res.json(pacientes);
+  } catch (err) {
+    res.status(500).json({ message: 'Error al obtener pacientes.' });
+  }
+});
 
 // Registro de paciente
 router.post('/register', async (req, res) => {

@@ -22,6 +22,13 @@ function LoginDoctor() {
       const data = await res.json();
       if (res.ok) {
         setMensaje('Inicio de sesión exitoso. Bienvenido Doctor.');
+        console.log('Doctor recibido del backend:', data.doctor);
+        if (data.doctor && data.doctor._id) {
+          window.localStorage.setItem('medicoId', data.doctor._id);
+          console.log('medicoId guardado en localStorage:', data.doctor._id);
+        } else {
+          console.log('No se recibió _id de doctor');
+        }
         setTimeout(() => {
           navigate('/panel-doctor');
         }, 1000);

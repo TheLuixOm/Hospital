@@ -1,0 +1,75 @@
+/* Estilos para historial médico y formularios de registro */
+
+.historial-container {
+  margin-top: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #ccc;
+  padding: 2rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.historial-list {
+  list-style: none;
+  padding: 0;
+}
+
+.historial-item {
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  background: #f8fbff;
+  box-shadow: 0 2px 6px #e3e3e3;
+  transition: box-shadow 0.2s;
+}
+.historial-item:hover {
+  box-shadow: 0 4px 16px #b3d1f7;
+}
+
+.historial-label {
+  color: #1976d2;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.form-registro-historial {
+  margin-top: 1.5rem;
+  background: #f9f9f9;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 8px #e3e3e3;
+}
+.form-registro-historial h3 {
+  color: #1976d2;
+  margin-bottom: 1.2rem;
+}
+.form-registro-historial input,
+.form-registro-historial textarea {
+  width: 100%;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background: #fff;
+}
+.form-registro-historial button {
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  margin-top: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.form-registro-historial button:hover {
+  background: #125ea7;
+}

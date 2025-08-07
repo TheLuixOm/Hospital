@@ -24,8 +24,10 @@ db.once('open', () => {
 // Import routes
 const doctorRoutes = require('./routes/doctor');
 const pacienteRoutes = require('./routes/paciente');
+const historialRoutes = require('./routes/historial');
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/paciente', pacienteRoutes);
+app.use('/api/historial', historialRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

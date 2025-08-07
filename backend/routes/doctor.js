@@ -46,7 +46,16 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Credenciales inválidas.' });
     }
-    res.json({ message: 'Login exitoso', doctor: { nombre: doctor.nombre, apellido: doctor.apellido, usuario: doctor.usuario, email: doctor.email } });
+    res.json({
+      message: 'Login exitoso',
+      doctor: {
+        _id: doctor._id,
+        nombre: doctor.nombre,
+        apellido: doctor.apellido,
+        usuario: doctor.usuario,
+        email: doctor.email
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: 'Error en el servidor.' });
   }
