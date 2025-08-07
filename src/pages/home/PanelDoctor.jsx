@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import HistorialPaciente from '../../components/HistorialPaciente';
 import FormRegistroHistorial from '../../components/FormRegistroHistorial';
 import PacientesList from '../../components/PacientesList';
+
 import { FaQrcode, FaSearch, FaStethoscope, FaSignOutAlt } from 'react-icons/fa';
+import EscanerQRHtml5 from '../../components/EscanerQRHtml5';
 
 
 function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
   const [showHistorial, setShowHistorial] = useState(false);
   const [pacienteId, setPacienteId] = useState('');
   const [showRegistro, setShowRegistro] = useState(false);
+  const [showEscaner, setShowEscaner] = useState(false);
   const [sesionInvalida, setSesionInvalida] = useState(false);
 
   // Siempre leer medicoId de localStorage en cada render
@@ -50,6 +53,7 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
           <FaQrcode size={32} style={styles.icon} />
           <h3>Escanear QR</h3>
           <p>Escanea el código QR del paciente para acceder directamente a su registro médico.</p>
+          <button onClick={() => setShowEscaner(true)} style={{marginTop:'0.5rem',padding:'0.5rem 1rem',borderRadius:'6px',border:'none',background:'#1976d2',color:'#fff'}}>Abrir Escáner</button>
         </div>
 
         <div style={styles.card}>
@@ -86,7 +90,19 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
         </div>
       </div>
 
+
       <PacientesList onSelect={p => setPacienteId(p._id)} />
+
+      {showEscaner && (
+        <EscanerQRHtml5
+          onScan={id => {
+            setShowEscaner(false);
+            setPacienteId(id);
+            setShowHistorial(true);
+          }}
+          onClose={() => setShowEscaner(false)}
+        />
+      )}
 
       {showHistorial && pacienteId && (
         <div style={{marginTop:'2rem',background:'#fff',borderRadius:'12px',boxShadow:'0 2px 8px #ccc',padding:'2rem'}}>

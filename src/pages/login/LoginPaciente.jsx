@@ -27,6 +27,9 @@ const LoginPaciente = () => {
       const data = await res.json();
       if (res.ok) {
         alert('Inicio de sesión exitoso');
+        if (data.paciente && data.paciente._id) {
+          window.localStorage.setItem('paciente', JSON.stringify(data.paciente));
+        }
         setTimeout(() => {
           navigate('/panel-paciente');
         }, 1000);
