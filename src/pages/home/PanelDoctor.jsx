@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import HistorialPaciente from '../../components/HistorialPaciente';
 import FormRegistroHistorial from '../../components/FormRegistroHistorial';
 import PacientesList from '../../components/PacientesList';
@@ -13,6 +14,7 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
   const [showRegistro, setShowRegistro] = useState(false);
   const [showEscaner, setShowEscaner] = useState(false);
   const [sesionInvalida, setSesionInvalida] = useState(false);
+  const navigate = useNavigate();
 
   // Siempre leer medicoId de localStorage en cada render
   const medicoId = window.localStorage.getItem('medicoId') || '';
@@ -86,8 +88,7 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
         <EscanerQRHtml5
           onScan={id => {
             setShowEscaner(false);
-            setPacienteId(id);
-            setShowHistorial(true);
+            navigate(`/registros/${id}`);
           }}
           onClose={() => setShowEscaner(false)}
         />

@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-// face-api.js debe instalarse y cargarse por CDN o npm
-// npm install face-api.js
-// El import se elimina, se usará window.faceapi
+import * as faceapi from 'face-api.js';
 
 function FaceLogin({ onLogin, loading, error }) {
   const videoRef = useRef();
@@ -12,9 +10,9 @@ function FaceLogin({ onLogin, loading, error }) {
   useEffect(() => {
     async function loadModels() {
       setStatus('Cargando modelos de reconocimiento facial...');
-      await window.faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-      await window.faceapi.nets.faceRecognitionNet.loadFromUri('/models');
-      await window.faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+  await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+  await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+  await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
       setModelsLoaded(true);
       setStatus('Modelos cargados. Permite acceso a la cámara.');
     }
@@ -34,7 +32,7 @@ function FaceLogin({ onLogin, loading, error }) {
   const handleCapture = async () => {
     setProcessing(true);
     setStatus('Procesando rostro...');
-    const detections = await window.faceapi.detectSingleFace(videoRef.current, new window.faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+  const detections = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
     if (!detections) {
       setStatus('No se detectó ningún rostro. Intenta de nuevo.');
       setProcessing(false);

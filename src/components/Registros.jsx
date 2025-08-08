@@ -1,18 +1,30 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import HistorialPaciente from './HistorialPaciente';
 import FormRegistroHistorial from './FormRegistroHistorial';
 
 function Registros() {
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const paciente = location.state?.paciente;
+  const [paciente, setPaciente] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [actualizarHistorial, setActualizarHistorial] = useState(false);
 
-  if (!paciente) {
-    return <p>No se encontró el paciente.</p>;
-  }
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    fetch(`http://localhost:5000/api/paciente/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setPaciente(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
+
+  if (loading) return <p>Cargando paciente...</p>;
+  if (!paciente) return <p>No se encontró el paciente.</p>;
 
   return (
     <div style={{marginTop:'2rem'}}>

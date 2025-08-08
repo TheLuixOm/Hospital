@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Registro de doctor
 router.post('/register', async (req, res) => {
-  const { nombre, apellido, usuario, email, password, certificacionId } = req.body;
+  const { nombre, apellido, usuario, email, password, certificacionId, faceDescriptor } = req.body;
   try {
     // Verificar si el ID de certificación existe
     const cert = await Certificacion.findOne({ certificacionId });
@@ -26,6 +26,9 @@ router.post('/register', async (req, res) => {
     // Hashear contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
     const doctor = new Doctor({ nombre, apellido, usuario, email, password: hashedPassword, certificacionId });
+    if (faceDescriptor && Array.isArray(faceDescriptor)) {
+      doctor.faceDescriptor = faceDescriptor;
+    }
     await doctor.save();
     res.status(201).json({ message: 'Doctor registrado correctamente.' });
   } catch (err) {

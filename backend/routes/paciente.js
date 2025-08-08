@@ -70,4 +70,16 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+// Obtener paciente por ID
+router.get('/:id', async (req, res) => {
+  try {
+    const paciente = await Paciente.findById(req.params.id, '-password');
+    if (!paciente) return res.status(404).json({ message: 'Paciente no encontrado.' });
+    res.json(paciente);
+  } catch (err) {
+    res.status(500).json({ message: 'Error al buscar paciente.' });
+  }
+});
+
 module.exports = router;
