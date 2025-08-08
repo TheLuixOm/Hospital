@@ -33,14 +33,35 @@ function HistorialPaciente({ pacienteId }) {
       ) : (
         <ul className="historial-list">
           {historial.map(registro => (
-            <li key={registro._id} className="historial-item">
-              <span className="historial-label">Fecha:</span> {new Date(registro.fecha).toLocaleString()}<br/>
-              <span className="historial-label">Médico:</span> {registro.medico?.nombre} {registro.medico?.apellido}<br/>
-              <span className="historial-label">Motivo:</span> {registro.motivo}<br/>
-              <span className="historial-label">Diagnóstico:</span> {registro.diagnostico}<br/>
-              <span className="historial-label">Tratamiento:</span> {registro.tratamiento}<br/>
-              <span className="historial-label">Exámenes:</span> {registro.examenes}<br/>
-              <span className="historial-label">Notas:</span> {registro.notas}
+            <li key={registro._id} className="historial-item" style={{background:'#fff',border:'1px solid #e3e3e3',borderRadius:'12px',padding:'1.5rem',marginBottom:'1.5rem',boxShadow:'0 2px 8px #e3e3e3'}}>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Fecha:</span>
+                <span>{new Date(registro.fecha).toLocaleString()}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Médico:</span>
+                <span>{registro.medico?.nombre} {registro.medico?.apellido}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Motivo:</span>
+                <span>{registro.motivo}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Diagnóstico:</span>
+                <span>{registro.diagnostico}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Tratamiento:</span>
+                <span>{registro.tratamiento}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Exámenes:</span>
+                <span>{registro.examenes}</span>
+              </div>
+              <div style={{display:'flex',justifyContent:'space-between'}}>
+                <span style={{fontWeight:'bold',fontSize:'1.1em'}}>Notas:</span>
+                <span>{registro.notas}</span>
+              </div>
             </li>
           ))}
         </ul>

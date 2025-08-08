@@ -58,29 +58,14 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
 
         <div style={styles.card}>
           <FaSearch size={32} style={styles.icon} />
-          <h3>Pacientes</h3>
-          <p>Selecciona un paciente para ver su historial o registrar diagnóstico.</p>
+          <h3>Buscar Paciente</h3>
+          <p>Haz clic en Buscar para desplegar la barra de búsqueda. Ingresa la cédula del paciente que deseas consultar. Desde aquí podrás acceder al historial médico o registrar nuevos diagnósticos.</p>
           <button
-            onClick={() => setShowHistorial(true)}
-            style={{marginTop:'0.5rem',padding:'0.5rem 1rem',borderRadius:'6px',border:'none',background:'#0077cc',color:'#fff'}}
-            disabled={!pacienteId}
+            onClick={() => setShowHistorial(h => !h)}
+            style={{marginTop:'0.5rem',padding:'0.5rem 1.5rem',borderRadius:'8px',border:'none',background:'#1976d2',color:'#fff',fontWeight:'bold'}}
           >
-            Ver Historial
+            Buscar
           </button>
-          <button
-            onClick={() => setShowRegistro(true)}
-            style={{marginTop:'0.5rem',padding:'0.5rem 1rem',borderRadius:'6px',border:'none',background:'#1976d2',color:'#fff',marginLeft:'0.5rem'}}
-            disabled={!pacienteId}
-          >
-            Registrar Diagnóstico
-          </button>
-        </div>
-
-        <div style={styles.card}>
-          <FaStethoscope size={32} style={styles.icon} />
-          <h3>Registrar Diagnóstico</h3>
-          <p>Agrega un nuevo diagnóstico o tratamiento al historial de un paciente.</p>
-          <button onClick={() => setShowRegistro(true)} style={{marginTop:'0.5rem',padding:'0.5rem 1rem',borderRadius:'6px',border:'none',background:'#1976d2',color:'#fff'}}>Registrar</button>
         </div>
 
         <div style={{ ...styles.card, backgroundColor: '#ffecec', cursor: 'pointer' }} onClick={handleCerrarSesion}>
@@ -91,7 +76,11 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
       </div>
 
 
-      <PacientesList onSelect={p => setPacienteId(p._id)} />
+      {showHistorial && (
+        <div style={{marginTop:'2rem'}}>
+          <PacientesList onSelect={p => setPacienteId(p._id)} />
+        </div>
+      )}
 
       {showEscaner && (
         <EscanerQRHtml5
