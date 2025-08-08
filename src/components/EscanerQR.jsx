@@ -4,7 +4,7 @@ import { QrReader } from 'react-qr-reader';
 
 function EscanerQR({ onScan, onClose }) {
   const [errorMsg, setErrorMsg] = useState('');
-  // Forzar cámara frontal (user) para laptops
+  // Forzar camara frontal
   const facingMode = 'user';
   const [videoVisible, setVideoVisible] = useState(true);
   return (

@@ -9,7 +9,7 @@ function Navbar() {
   return (
     <nav style={styles.nav}>
       <h3 style={styles.title} onClick={() => navigate('/')}>
-        Mi App Médica
+        MediDataOS
       </h3>
       <div style={styles.menuContainer}>
         <button onClick={() => navigate('/')} style={styles.button}>

@@ -16,7 +16,7 @@ function Inicio() {
           />
           <div>
             <h1 style={styles.title}>
-              Mi App<span style={styles.highlight}>MEDICA</span>
+              MediData<span style={styles.highlight}>OS</span>
             </h1>
             <p style={styles.subtitle}>
               Tu plataforma confiable para guardar y visualizar registros médicos.
@@ -78,9 +78,9 @@ function Inicio() {
         <div style={styles.footerContent}>
           <div style={styles.contactInfo}>
             <h3 style={styles.footerHeading}>Contáctanos</h3>
-            <p>📍 Calle Salud 123, Ciudad Médica</p>
-            <p>📞 +1 (555) 123-4567</p>
-            <p>✉️ contacto@clinico.com</p>
+            <p>📍 Boca Caneyes, Calle principal</p>
+            <p>📞 +58 414-747-0668</p>
+            <p>✉️ MediDataOS@clinico.com</p>
           </div>
           <div style={styles.social}>
             <h3 style={styles.footerHeading}>Síguenos</h3>
@@ -91,7 +91,7 @@ function Inicio() {
             </div>
           </div>
         </div>
-        <p style={styles.copy}>&copy; 2025 CLINICO. Todos los derechos reservados.</p>
+        <p style={styles.copy}>&copy; 2025 MediDataOS. Todos los derechos reservados.</p>
       </footer>
     </div>
   );
