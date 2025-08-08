@@ -8,6 +8,7 @@ import RegistroDoctor from './pages/registro/RegistroDoctor';
 import RegistroPaciente from './pages/registro/RegistroPaciente';
 import PanelDoctor from './pages/home/PanelDoctor';
 import PanelPaciente from './pages/home/PanelPaciente';
+import Registros from './components/Registros';
 
 function App() {
   return (
@@ -25,10 +26,12 @@ function App() {
         <Route path="/registro-doctor" element={<RegistroDoctor />} />
         <Route path="/registro-paciente" element={<RegistroPaciente />} />
 
-        {/* Página a la que redirige el doctor al iniciar sesión */}
-        <Route path="/panel-doctor" element={<PanelDoctor />} />
-        {/* Página a la que redirige el paciente al iniciar sesión */}
-        <Route path="/panel-paciente" element={<PanelPaciente />} />
+  {/* Página a la que redirige el doctor al iniciar sesión */}
+  <Route path="/panel-doctor" element={<PanelDoctor />} />
+  {/* Página a la que redirige el paciente al iniciar sesión */}
+  <Route path="/panel-paciente" element={<PanelPaciente />} />
+  {/* Vista de registros de paciente */}
+  <Route path="/registros/:id" element={<Registros />} />
       </Routes>
     </Router>
   );

@@ -54,7 +54,7 @@ function FormRegistroHistorial({ pacienteId, medicoId, onRegistroExitoso }) {
       <input name="tratamiento" value={form.tratamiento} onChange={handleChange} placeholder="Tratamiento" />
       <input name="examenes" value={form.examenes} onChange={handleChange} placeholder="Resultados de exámenes" />
       <textarea name="notas" value={form.notas} onChange={handleChange} placeholder="Notas adicionales" style={{minHeight:'60px'}} />
-      <button type="submit" disabled={loading}>Registrar</button>
+  <button type="submit" disabled={loading} style={{padding:'0.7rem 1.5rem',borderRadius:'8px',background:'#1976d2',color:'#fff',border:'none',fontWeight:'bold'}}>Registrar</button>
     </form>
   );
 }
