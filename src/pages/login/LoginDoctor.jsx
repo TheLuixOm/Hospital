@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import FaceLogin from '../../components/FaceLogin';
 import { useNavigate } from 'react-router-dom';
 
 function LoginDoctor() {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const [showFaceLogin, setShowFaceLogin] = useState(false);
+  const [faceError, setFaceError] = useState('');
   const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
@@ -22,12 +25,8 @@ function LoginDoctor() {
       const data = await res.json();
       if (res.ok) {
         setMensaje('Inicio de sesión exitoso. Bienvenido Doctor.');
-        console.log('Doctor recibido del backend:', data.doctor);
         if (data.doctor && data.doctor._id) {
           window.localStorage.setItem('medicoId', data.doctor._id);
-          console.log('medicoId guardado en localStorage:', data.doctor._id);
-        } else {
-          console.log('No se recibió _id de doctor');
         }
         setTimeout(() => {
           navigate('/panel-doctor');
@@ -40,30 +39,66 @@ function LoginDoctor() {
     }
   };
 
+  // Lógica de login facial
+  const handleFaceLogin = async (descriptor) => {
+    setFaceError('');
+    setMensaje('Verificando rostro...');
+    try {
+      const res = await fetch('http://localhost:5000/api/doctor/login-facial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ descriptor: Array.from(descriptor) })
+      });
+      const data = await res.json();
+      if (res.ok && data.doctor && data.doctor._id) {
+        window.localStorage.setItem('medicoId', data.doctor._id);
+        setMensaje('Inicio de sesión facial exitoso.');
+        setTimeout(() => {
+          navigate('/panel-doctor');
+        }, 1000);
+      } else {
+        setFaceError(data.message || 'No se reconoció el rostro.');
+        setMensaje('');
+      }
+    } catch (err) {
+      setFaceError('Error de conexión con el servidor');
+      setMensaje('');
+    }
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.card}>
         <h2 style={styles.title}>Inicio de Sesión - Doctor</h2>
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <input
-            type="text"
-            placeholder="Usuario"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <button type="submit" style={styles.button}>Iniciar Sesión</button>
-        </form>
-        {mensaje && <p style={styles.message}>{mensaje}</p>}
+        {!showFaceLogin ? (
+          <>
+            <form onSubmit={handleSubmit} style={styles.form}>
+              <input
+                type="text"
+                placeholder="Usuario"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
+                required
+                style={styles.input}
+              />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={contrasena}
+                onChange={(e) => setContrasena(e.target.value)}
+                required
+                style={styles.input}
+              />
+              <button type="submit" style={styles.button}>Iniciar Sesión</button>
+            </form>
+            <button style={{...styles.button, background:'#43a047',marginTop:'1rem'}} onClick={() => setShowFaceLogin(true)}>
+              Iniciar sesión con rostro
+            </button>
+            {mensaje && <p style={styles.message}>{mensaje}</p>}
+          </>
+        ) : (
+          <FaceLogin onLogin={handleFaceLogin} error={faceError} />
+        )}
       </div>
     </div>
   );
@@ -120,5 +155,4 @@ const styles = {
     fontWeight: 'bold',
   },
 };
-
 export default LoginDoctor;

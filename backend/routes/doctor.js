@@ -61,4 +61,35 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+// Login facial de doctor
+const { findBestMatch } = require('../utils/face');
+router.post('/login-facial', async (req, res) => {
+  const { descriptor } = req.body;
+  if (!descriptor || !Array.isArray(descriptor)) {
+    return res.status(400).json({ message: 'Descriptor facial inválido.' });
+  }
+  try {
+    // Buscar todos los doctores con embedding facial
+    const doctors = await Doctor.find({ faceDescriptor: { $exists: true, $ne: null } });
+    const match = findBestMatch(descriptor, doctors, 0.5); // threshold ajustable
+    if (match) {
+      return res.json({
+        message: 'Login facial exitoso',
+        doctor: {
+          _id: match._id,
+          nombre: match.nombre,
+          apellido: match.apellido,
+          usuario: match.usuario,
+          email: match.email
+        }
+      });
+    } else {
+      return res.status(401).json({ message: 'No se reconoció el rostro.' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error en el servidor.' });
+  }
+});
+
 module.exports = router;

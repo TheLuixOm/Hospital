@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import FaceRegister from '../../components/FaceRegister';
 
 function RegistroDoctor({ cambiarVista }) {
   const [formulario, setFormulario] = useState({
@@ -11,6 +11,9 @@ function RegistroDoctor({ cambiarVista }) {
     contrasena: '',
     idCertificacion: ''
   });
+  const [faceDescriptor, setFaceDescriptor] = useState(null);
+  const [faceError, setFaceError] = useState('');
+  const [showFaceRegister, setShowFaceRegister] = useState(false);
 
   const manejarCambio = (e) => {
     setFormulario({
@@ -21,6 +24,10 @@ function RegistroDoctor({ cambiarVista }) {
 
   const manejarEnvio = async (e) => {
     e.preventDefault();
+    if (!faceDescriptor) {
+      setFaceError('Debes registrar tu rostro antes de continuar.');
+      return;
+    }
     try {
       const res = await fetch('http://localhost:5000/api/doctor/register', {
         method: 'POST',
@@ -31,7 +38,8 @@ function RegistroDoctor({ cambiarVista }) {
           usuario: formulario.usuario,
           email: formulario.email,
           password: formulario.contrasena,
-          certificacionId: formulario.idCertificacion
+          certificacionId: formulario.idCertificacion,
+          faceDescriptor: Array.from(faceDescriptor)
         })
       });
       const data = await res.json();
@@ -47,6 +55,7 @@ function RegistroDoctor({ cambiarVista }) {
           contrasena: '',
           idCertificacion: ''
         });
+        setFaceDescriptor(null);
         cambiarVista('inicio');
       } else {
         alert(data.message || 'Error en el registro');
@@ -64,6 +73,16 @@ function RegistroDoctor({ cambiarVista }) {
     <div style={styles.fondo}>
       <div style={styles.container}>
         <h2 style={styles.titulo}>Registro de Doctor</h2>
+        <button type="button" style={{...styles.input, background:'#43a047', color:'#fff', marginBottom:16}} onClick={() => setShowFaceRegister(true)}>
+          {faceDescriptor ? 'Rostro registrado ✔' : 'Registrar rostro'}
+        </button>
+        {faceError && <div style={{color:'red',marginBottom:12}}>{faceError}</div>}
+        {showFaceRegister && (
+          <FaceRegister
+            onRegister={desc => { setFaceDescriptor(desc); setShowFaceRegister(false); setFaceError(''); }}
+            error={faceError}
+          />
+        )}
         <form onSubmit={manejarEnvio} style={styles.form}>
           <input
             type="text"
@@ -201,3 +220,4 @@ const styles = {
 };
 
 export default RegistroDoctor;
+import React, { useState } from 'react';
