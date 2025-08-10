@@ -2,8 +2,35 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const Paciente = require('../models/Paciente');
-
 const router = express.Router();
+
+// Actualizar datos clínicos básicos del paciente
+router.put('/datos-clinicos/:id', async (req, res) => {
+  try {
+    const updateFields = {};
+    const campos = [
+      'alergias',
+      'enfermedades',
+      'antecedentesPersonales',
+      'antecedentesFamiliares',
+      'medicamentosActuales',
+      'enfermedadesCronicas',
+      'vacunas'
+    ];
+    campos.forEach(campo => {
+      if (req.body[campo] !== undefined) updateFields[campo] = req.body[campo];
+    });
+    const paciente = await Paciente.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateFields },
+      { new: true, select: '-password' }
+    );
+    if (!paciente) return res.status(404).json({ message: 'Paciente no encontrado.' });
+    res.json(paciente);
+  } catch (err) {
+    res.status(500).json({ message: 'Error al actualizar datos clínicos.' });
+  }
+});
 
 // Obtener todos los pacientes
 router.get('/all', async (req, res) => {
@@ -17,7 +44,8 @@ router.get('/all', async (req, res) => {
 
 // Registro de paciente
 router.post('/register', async (req, res) => {
-  const { nombre, apellido, usuario, email, password, fechaNacimiento, telefono, cedula, tipoSangre, alergias, enfermedades, direccion } = req.body;
+  const { nombre, apellido, usuario, email, password, fechaNacimiento, telefono, cedula, tipoSangre, alergias, enfermedades, direccion,
+    antecedentesPersonales, antecedentesFamiliares, medicamentosActuales, enfermedadesCronicas, vacunas } = req.body;
   try {
     // Verificar si el email o usuario ya está registrado
     const existingEmail = await Paciente.findOne({ email });
@@ -42,7 +70,12 @@ router.post('/register', async (req, res) => {
       tipoSangre,
       alergias,
       enfermedades,
-      direccion
+      direccion,
+      antecedentesPersonales: antecedentesPersonales || '',
+      antecedentesFamiliares: antecedentesFamiliares || '',
+      medicamentosActuales: medicamentosActuales || '',
+      enfermedadesCronicas: enfermedadesCronicas || '',
+      vacunas: vacunas || ''
     });
     await paciente.save();
     res.status(201).json({ message: 'Paciente registrado correctamente.' });

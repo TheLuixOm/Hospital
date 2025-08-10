@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import RecuperarContrasenaPaciente from './RecuperarContrasenaPaciente';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPaciente = () => {
@@ -7,6 +8,7 @@ const LoginPaciente = () => {
     contraseña: ''
   });
   const navigate = useNavigate();
+  const [mostrarRecuperar, setMostrarRecuperar] = useState(false);
 
   const manejarCambio = (e) => {
     setDatos({ ...datos, [e.target.name]: e.target.value });
@@ -44,6 +46,9 @@ const LoginPaciente = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Inicio de Sesión</h2>
+      {mostrarRecuperar && (
+        <RecuperarContrasenaPaciente onClose={() => setMostrarRecuperar(false)} />
+      )}
       <form onSubmit={manejarEnvio} style={styles.form}>
         <div style={styles.campo}>
           <label style={styles.label}>Usuario o Correo Electrónico:</label>
@@ -71,7 +76,7 @@ const LoginPaciente = () => {
 
         <button type="submit" style={styles.button}>Iniciar Sesión</button>
         <div style={styles.extraLinks}>
-          <a href="#" style={styles.link}>¿Olvidaste tu contraseña?</a>
+          <button type="button" style={{...styles.link,background:'none',border:'none',padding:0,cursor:'pointer'}} onClick={()=>setMostrarRecuperar(true)}>¿Olvidaste tu contraseña?</button>
         </div>
       </form>
     </div>

@@ -12,7 +12,13 @@ const PacienteSchema = new mongoose.Schema({
   tipoSangre: { type: String },
   alergias: { type: String },
   enfermedades: { type: String },
+  antecedentesPersonales: { type: String },
+  antecedentesFamiliares: { type: String },
+  medicamentosActuales: { type: String },
+  enfermedadesCronicas: { type: String },
+  vacunas: { type: String },
   direccion: { type: String },
+  examenesMedicos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ExamenMedico' }],
 });
 
 module.exports = mongoose.model('Paciente', PacienteSchema);

@@ -7,7 +7,7 @@ const HistorialSchema = new mongoose.Schema({
   motivo: { type: String, required: true },
   diagnostico: { type: String },
   tratamiento: { type: String },
-  examenes: { type: String }, // Descripción o resultados
+  examenes: { type: String }, // Resultados de exámenes o texto libre
   notas: { type: String },
   archivos: [{ type: String }], // URLs o nombres de archivos adjuntos
 });

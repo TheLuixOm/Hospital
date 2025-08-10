@@ -22,12 +22,22 @@ db.once('open', () => {
 
 
 // Import routes
+
+const path = require('path');
 const doctorRoutes = require('./routes/doctor');
 const pacienteRoutes = require('./routes/paciente');
 const historialRoutes = require('./routes/historial');
+const examenMedicoRoutes = require('./routes/examenMedico');
+const recuperarContrasenaPacienteRoutes = require('./routes/recuperarContrasenaPaciente');
+
+// Servir archivos subidos
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/paciente', pacienteRoutes);
 app.use('/api/historial', historialRoutes);
+app.use('/api/examenes', examenMedicoRoutes);
+app.use('/api/paciente', recuperarContrasenaPacienteRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
