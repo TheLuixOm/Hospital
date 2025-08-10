@@ -8,15 +8,17 @@ import { FaQrcode, FaSearch, FaStethoscope, FaSignOutAlt } from 'react-icons/fa'
 import EscanerQRHtml5 from '../../components/EscanerQRHtml5';
 
 
-function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
+
+function PanelDoctor({ onCerrarSesion }) {
   const [showHistorial, setShowHistorial] = useState(false);
   const [pacienteId, setPacienteId] = useState('');
   const [showRegistro, setShowRegistro] = useState(false);
   const [showEscaner, setShowEscaner] = useState(false);
   const [sesionInvalida, setSesionInvalida] = useState(false);
+  const [doctor, setDoctor] = useState({ nombre: '', apellido: '' });
   const navigate = useNavigate();
 
-  // Siempre leer medicoId de localStorage en cada render
+  // Siempre leer medicoId y datos del doctor de localStorage en cada render
   const medicoId = window.localStorage.getItem('medicoId') || '';
   useEffect(() => {
     // Si el valor es null, undefined, vacío o "undefined", limpiar y forzar cierre de sesión
@@ -25,6 +27,13 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
       setSesionInvalida(true);
     } else {
       setSesionInvalida(false);
+      // Intentar leer datos del doctor
+      try {
+        const d = JSON.parse(window.localStorage.getItem('doctor'));
+        if (d && d.nombre && d.apellido) {
+          setDoctor({ nombre: d.nombre, apellido: d.apellido });
+        }
+      } catch {}
     }
   }, [medicoId]);
 
@@ -47,7 +56,7 @@ function PanelDoctor({ doctor = 'Nombre Apellido', onCerrarSesion }) {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Bienvenido, Dr. {doctor}</h1>
+      <h1 style={styles.title}>Bienvenido, Dr. {doctor.nombre} {doctor.apellido}</h1>
       <p style={styles.subtitle}>Seleccione una acción para continuar:</p>
 
       <div style={styles.cardContainer}>

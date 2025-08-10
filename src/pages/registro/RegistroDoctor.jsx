@@ -11,9 +11,10 @@ function RegistroDoctor({ cambiarVista }) {
     contrasena: '',
     idCertificacion: ''
   });
+  const [doctorId, setDoctorId] = useState(null);
   const [faceDescriptor, setFaceDescriptor] = useState(null);
   const [faceError, setFaceError] = useState('');
-  const [showFaceRegister, setShowFaceRegister] = useState(false);
+  const [paso, setPaso] = useState(1);
 
   const manejarCambio = (e) => {
     setFormulario({
@@ -24,10 +25,6 @@ function RegistroDoctor({ cambiarVista }) {
 
   const manejarEnvio = async (e) => {
     e.preventDefault();
-    if (!faceDescriptor) {
-      setFaceError('Debes registrar tu rostro antes de continuar.');
-      return;
-    }
     try {
       const res = await fetch('http://localhost:5000/api/doctor/register', {
         method: 'POST',
@@ -38,25 +35,26 @@ function RegistroDoctor({ cambiarVista }) {
           usuario: formulario.usuario,
           email: formulario.email,
           password: formulario.contrasena,
-          certificacionId: formulario.idCertificacion,
-          faceDescriptor: Array.from(faceDescriptor)
+          certificacionId: formulario.idCertificacion
         })
       });
       const data = await res.json();
       if (res.ok) {
-        alert('Registro exitoso');
+        alert('Registro exitoso. Ahora puedes registrar tu rostro (opcional).');
+        // Buscar el doctor recién creado para obtener su _id
+        const buscar = await fetch('http://localhost:5000/api/doctor/all');
+        const lista = await buscar.json();
+        const recien = lista.find(d => d.usuario === formulario.usuario && d.email === formulario.email);
+        if (recien && recien._id) {
+          setDoctorId(recien._id);
+          setPaso(2);
+        } else {
+          alert('Doctor registrado, pero no se pudo iniciar registro facial.');
+          cambiarVista('inicio');
+        }
         setFormulario({
-          nombre: '',
-          apellido: '',
-          fechaNacimiento: '',
-          email: '',
-          telefono: '',
-          usuario: '',
-          contrasena: '',
-          idCertificacion: ''
+          nombre: '', apellido: '', fechaNacimiento: '', email: '', telefono: '', usuario: '', contrasena: '', idCertificacion: ''
         });
-        setFaceDescriptor(null);
-        cambiarVista('inicio');
       } else {
         alert(data.message || 'Error en el registro');
       }
@@ -69,97 +67,122 @@ function RegistroDoctor({ cambiarVista }) {
     }
   };
 
+  // Guardar rostro en backend
+  const handleFaceRegister = async (descriptor) => {
+    setFaceError('');
+    setFaceDescriptor(descriptor);
+    if (!doctorId) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/doctor/face/${doctorId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ faceDescriptor: Array.from(descriptor) })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('¡Rostro registrado exitosamente!');
+        setPaso(1);
+        setDoctorId(null);
+        setFaceDescriptor(null);
+        cambiarVista('inicio');
+      } else {
+        setFaceError(data.message || 'Error al guardar rostro');
+      }
+    } catch (err) {
+      setFaceError('Error de conexión con el servidor');
+    }
+  };
+
   return (
     <div style={styles.fondo}>
       <div style={styles.container}>
         <h2 style={styles.titulo}>Registro de Doctor</h2>
-        <button type="button" style={{...styles.input, background:'#43a047', color:'#fff', marginBottom:16}} onClick={() => setShowFaceRegister(true)}>
-          {faceDescriptor ? 'Rostro registrado ✔' : 'Registrar rostro'}
-        </button>
-        {faceError && <div style={{color:'red',marginBottom:12}}>{faceError}</div>}
-        {showFaceRegister && (
-          <FaceRegister
-            onRegister={desc => { setFaceDescriptor(desc); setShowFaceRegister(false); setFaceError(''); }}
-            error={faceError}
-          />
+        {paso === 1 && (
+          <form onSubmit={manejarEnvio} style={styles.form}>
+            <input
+              type="text"
+              name="nombre"
+              placeholder="Nombre"
+              value={formulario.nombre}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="apellido"
+              placeholder="Apellido"
+              value={formulario.apellido}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <label style={styles.label}>Fecha de nacimiento:</label>
+            <input
+              type="date"
+              name="fechaNacimiento"
+              value={formulario.fechaNacimiento}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Correo electrónico"
+              value={formulario.email}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <input
+              type="tel"
+              name="telefono"
+              placeholder="Teléfono"
+              value={formulario.telefono}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="usuario"
+              placeholder="Nombre de usuario"
+              value={formulario.usuario}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <input
+              type="password"
+              name="contrasena"
+              placeholder="Contraseña"
+              value={formulario.contrasena}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="idCertificacion"
+              placeholder="ID de Certificación Médica"
+              value={formulario.idCertificacion}
+              onChange={manejarCambio}
+              style={styles.input}
+              required
+            />
+            <button type="submit" style={styles.boton}>
+              Registrarse
+            </button>
+          </form>
         )}
-        <form onSubmit={manejarEnvio} style={styles.form}>
-          <input
-            type="text"
-            name="nombre"
-            placeholder="Nombre"
-            value={formulario.nombre}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <input
-            type="text"
-            name="apellido"
-            placeholder="Apellido"
-            value={formulario.apellido}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <label style={styles.label}>Fecha de nacimiento:</label>
-          <input
-            type="date"
-            name="fechaNacimiento"
-            value={formulario.fechaNacimiento}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            value={formulario.email}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <input
-            type="tel"
-            name="telefono"
-            placeholder="Teléfono"
-            value={formulario.telefono}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <input
-            type="text"
-            name="usuario"
-            placeholder="Nombre de usuario"
-            value={formulario.usuario}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <input
-            type="password"
-            name="contrasena"
-            placeholder="Contraseña"
-            value={formulario.contrasena}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <input
-            type="text"
-            name="idCertificacion"
-            placeholder="ID de Certificación Médica"
-            value={formulario.idCertificacion}
-            onChange={manejarCambio}
-            style={styles.input}
-            required
-          />
-          <button type="submit" style={styles.boton}>
-            Registrarse
-          </button>
-        </form>
+        {paso === 2 && (
+          <div>
+            <h3 style={{textAlign:'center',marginBottom:'1rem'}}>Registro facial (opcional)</h3>
+            <FaceRegister onRegister={handleFaceRegister} error={faceError} />
+            <button style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer'}} onClick={()=>{setPaso(1);setDoctorId(null);}}>Omitir y finalizar</button>
+          </div>
+        )}
       </div>
     </div>
   );

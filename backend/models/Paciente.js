@@ -19,6 +19,7 @@ const PacienteSchema = new mongoose.Schema({
   vacunas: { type: String },
   direccion: { type: String },
   examenesMedicos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ExamenMedico' }],
+  faceDescriptor: { type: [Number], default: undefined }, // embedding facial opcional
 });
 
 module.exports = mongoose.model('Paciente', PacienteSchema);

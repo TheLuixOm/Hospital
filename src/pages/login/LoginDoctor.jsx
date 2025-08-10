@@ -27,6 +27,7 @@ function LoginDoctor() {
         setMensaje('Inicio de sesión exitoso. Bienvenido Doctor.');
         if (data.doctor && data.doctor._id) {
           window.localStorage.setItem('medicoId', data.doctor._id);
+          window.localStorage.setItem('doctor', JSON.stringify(data.doctor));
         }
         setTimeout(() => {
           navigate('/panel-doctor');
@@ -52,6 +53,7 @@ function LoginDoctor() {
       const data = await res.json();
       if (res.ok && data.doctor && data.doctor._id) {
         window.localStorage.setItem('medicoId', data.doctor._id);
+        window.localStorage.setItem('doctor', JSON.stringify(data.doctor));
         setMensaje('Inicio de sesión facial exitoso.');
         setTimeout(() => {
           navigate('/panel-doctor');
@@ -91,7 +93,15 @@ function LoginDoctor() {
               />
               <button type="submit" style={styles.button}>Iniciar Sesión</button>
             </form>
-            <button style={{...styles.button, background:'#43a047',marginTop:'1rem'}} onClick={() => setShowFaceLogin(true)}>
+            <button
+              style={{
+                ...styles.button,
+                background: '#43a047',
+                marginTop: '1rem',
+                width: '100%'
+              }}
+              onClick={() => setShowFaceLogin(true)}
+            >
               Iniciar sesión con rostro
             </button>
             {mensaje && <p style={styles.message}>{mensaje}</p>}
@@ -107,11 +117,14 @@ function LoginDoctor() {
 const styles = {
   container: {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #e3f2fd, #bbdefb)',
+    background: '#ffffffff',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    padding: '2rem',
+    paddingTop: '4.5rem',
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
+    paddingBottom: '2rem',
   },
   card: {
     backgroundColor: '#ffffff',

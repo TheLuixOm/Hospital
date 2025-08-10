@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import RecuperarContrasenaPaciente from './RecuperarContrasenaPaciente';
 import { useNavigate } from 'react-router-dom';
+import FaceLogin from '../../components/FaceLogin';
 
 const LoginPaciente = () => {
-  const [datos, setDatos] = useState({
-    usuarioCorreo: '',
-    contraseña: ''
-  });
-  const navigate = useNavigate();
+  const [datos, setDatos] = useState({ usuarioCorreo: '', contraseña: '' });
   const [mostrarRecuperar, setMostrarRecuperar] = useState(false);
+  const [mostrarFacial, setMostrarFacial] = useState(false);
+  const [faceError, setFaceError] = useState(null);
+  const navigate = useNavigate();
 
   const manejarCambio = (e) => {
     setDatos({ ...datos, [e.target.name]: e.target.value });
@@ -43,42 +43,88 @@ const LoginPaciente = () => {
     }
   };
 
+  // Login facial
+  const manejarLoginFacial = async (descriptor) => {
+    setFaceError(null);
+    try {
+      const res = await fetch('http://localhost:5000/api/paciente/login-facial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ faceDescriptor: Array.from(descriptor) })
+      });
+      const data = await res.json();
+      if (res.ok && data.paciente && data.paciente._id) {
+        alert('Inicio de sesión facial exitoso');
+        window.localStorage.setItem('paciente', JSON.stringify(data.paciente));
+        setTimeout(() => {
+          navigate('/panel-paciente');
+        }, 1000);
+      } else {
+        setFaceError(data.message || 'No se encontró coincidencia facial');
+      }
+    } catch (err) {
+      setFaceError('Error de conexión con el servidor');
+    }
+  };
+
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Inicio de Sesión</h2>
       {mostrarRecuperar && (
         <RecuperarContrasenaPaciente onClose={() => setMostrarRecuperar(false)} />
       )}
-      <form onSubmit={manejarEnvio} style={styles.form}>
-        <div style={styles.campo}>
-          <label style={styles.label}>Usuario o Correo Electrónico:</label>
-          <input
-            type="text"
-            name="usuarioCorreo"
-            value={datos.usuarioCorreo}
-            onChange={manejarCambio}
-            required
-            style={styles.input}
-          />
-        </div>
+      {!mostrarFacial ? (
+        <>
+          <form onSubmit={manejarEnvio} style={styles.form}>
+            <div style={styles.campo}>
+              <label style={styles.label}>Usuario o Correo Electrónico:</label>
+              <input
+                type="text"
+                name="usuarioCorreo"
+                value={datos.usuarioCorreo}
+                onChange={manejarCambio}
+                required
+                style={styles.input}
+              />
+            </div>
 
-        <div style={styles.campo}>
-          <label style={styles.label}>Contraseña:</label>
-          <input
-            type="password"
-            name="contraseña"
-            value={datos.contraseña}
-            onChange={manejarCambio}
-            required
-            style={styles.input}
-          />
-        </div>
+            <div style={styles.campo}>
+              <label style={styles.label}>Contraseña:</label>
+              <input
+                type="password"
+                name="contraseña"
+                value={datos.contraseña}
+                onChange={manejarCambio}
+                required
+                style={styles.input}
+              />
+            </div>
 
-        <button type="submit" style={styles.button}>Iniciar Sesión</button>
-        <div style={styles.extraLinks}>
-          <button type="button" style={{...styles.link,background:'none',border:'none',padding:0,cursor:'pointer'}} onClick={()=>setMostrarRecuperar(true)}>¿Olvidaste tu contraseña?</button>
+            <button type="submit" style={styles.button}>Iniciar Sesión</button>
+            <div style={styles.extraLinks}>
+              <button type="button" style={{...styles.link,background:'none',border:'none',padding:0,cursor:'pointer'}} onClick={()=>setMostrarRecuperar(true)}>¿Olvidaste tu contraseña?</button>
+            </div>
+          </form>
+          <div style={{textAlign:'center',marginTop:'2rem'}}>
+            <button
+              style={{
+                ...styles.button,
+                background: '#43a047',
+                marginTop: '1rem',
+                width: '100%'
+              }}
+              onClick={()=>setMostrarFacial(true)}
+            >
+              Iniciar sesión con rostro
+            </button>
+          </div>
+        </>
+      ) : (
+        <div>
+          <FaceLogin onLogin={manejarLoginFacial} error={faceError} />
+          <button style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer'}} onClick={()=>setMostrarFacial(false)}>Volver a login tradicional</button>
         </div>
-      </form>
+      )}
     </div>
   );
 };

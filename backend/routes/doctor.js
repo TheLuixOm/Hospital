@@ -5,6 +5,37 @@ const Certificacion = require('../models/Certificacion');
 
 const router = express.Router();
 
+// Registrar o actualizar el rostro (faceDescriptor) de un doctor
+router.put('/face/:id', async (req, res) => {
+  try {
+    const { faceDescriptor } = req.body;
+    if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
+      return res.status(400).json({ message: 'Descriptor facial inválido.' });
+    }
+    const doctor = await Doctor.findByIdAndUpdate(
+      req.params.id,
+      { $set: { faceDescriptor } },
+      { new: true, select: '-password' }
+    );
+    if (!doctor) return res.status(404).json({ message: 'Doctor no encontrado.' });
+    res.json({ message: 'Rostro registrado/actualizado correctamente.', doctor });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al registrar rostro.' });
+  }
+});
+
+
+// Obtener todos los doctores (para registro facial)
+router.get('/all', async (req, res) => {
+  try {
+    const doctores = await Doctor.find({}, '-password');
+    res.json(doctores);
+  } catch (err) {
+    res.status(500).json({ message: 'Error al obtener doctores.' });
+  }
+});
+
+
 // Registro de doctor
 router.post('/register', async (req, res) => {
   const { nombre, apellido, usuario, email, password, certificacionId, faceDescriptor } = req.body;

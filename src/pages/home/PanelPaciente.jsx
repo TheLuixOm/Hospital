@@ -1,5 +1,6 @@
 import React from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 function PanelPaciente() {
   let paciente = null;
@@ -8,15 +9,76 @@ function PanelPaciente() {
   } catch {}
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Bienvenido{paciente?.nombre ? `, ${paciente.nombre}` : ''}</h1>
+      <div style={{position:'relative',maxWidth:'1000px',margin:'0 auto 0.5rem auto'}}>
+        <h1 style={{...styles.title,marginBottom:0}}>Bienvenido{paciente?.nombre ? `, ${paciente.nombre}` : ''}</h1>
+        <button
+          onClick={() => {
+            window.localStorage.removeItem('paciente');
+            window.location.href = '/login-paciente';
+          }}
+          style={{
+            position:'absolute',
+            top:0,
+            right:'-100px', 
+            background:'#ffecec',
+            border:'1.5px solid #e74c3c',
+            borderRadius:'12px',
+            boxShadow:'0 4px 12px rgba(231,76,60,0.08)',
+            padding:'0.7rem 1.3rem',
+            display:'flex',
+            alignItems:'center',
+            gap:'0.7rem',
+            cursor:'pointer',
+            fontWeight:'bold',
+            color:'#e74c3c',
+            fontSize:'1.08rem',
+            transition:'background 0.2s',
+          }}
+          onMouseOver={e=>e.currentTarget.style.background='#fadbd8'}
+          onMouseOut={e=>e.currentTarget.style.background='#ffecec'}
+        >
+          <FaSignOutAlt size={20} />
+          Cerrar sesión
+        </button>
+      </div>
       <p style={styles.subtitle}>Este es tu panel de paciente. Aquí podrás consultar y actualizar tu información personal y médica.</p>
 
       {/* QR permanente del paciente */}
       {paciente?._id && (
         <div style={{margin:'2rem auto',maxWidth:300,background:'#fff',borderRadius:16,padding:'1.5rem',boxShadow:'0 2px 8px #ccc'}}>
           <h3 style={{color:'#1976d2',marginBottom:'1rem'}}>Tu Código QR Personal</h3>
-          <QRCodeCanvas value={paciente._id} size={200} level="H" includeMargin={true} />
+          <QRCodeCanvas id="qr-canvas" value={paciente._id} size={200} level="H" includeMargin={true} />
           <div style={{marginTop:'1rem',fontSize:'0.95em',color:'#888'}}>Este QR es único y permanente. Puedes imprimirlo o guardarlo para ser escaneado por tu médico.</div>
+          <div style={{marginTop:'1.5rem',display:'flex',gap:'1rem',justifyContent:'center'}}>
+            <button onClick={() => {
+              const canvas = document.getElementById('qr-canvas');
+              const url = canvas.toDataURL('image/png');
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `qr_paciente_${paciente._id}.png`;
+              a.click();
+            }} style={{padding:'0.5rem 1.2rem',borderRadius:8,border:'none',background:'#1976d2',color:'#fff',fontWeight:'bold',cursor:'pointer'}}>Descargar QR</button>
+            <button onClick={() => {
+              const canvas = document.getElementById('qr-canvas');
+              const dataUrl = canvas.toDataURL('image/png');
+              const win = window.open('', '_blank');
+              win.document.write(`
+                <html><head><title>Imprimir QR</title></head><body style='margin:0;padding:0;'>
+                  <img id='qrimg' src='${dataUrl}' style='width:200px;height:200px;display:block;margin:2rem auto' />
+                  <h3 style='text-align:center;font-family:sans-serif'>QR de paciente</h3>
+                  <script>
+                    var printQR = function() {
+                      window.focus();
+                      setTimeout(function(){ window.print(); }, 200);
+                    };
+                    var img = document.getElementById('qrimg');
+                    if (img.complete) printQR();
+                    else img.onload = printQR;
+                  <\/script>
+                </body></html>
+              `);
+            }} style={{padding:'0.5rem 1.2rem',borderRadius:8,border:'none',background:'#43a047',color:'#fff',fontWeight:'bold',cursor:'pointer'}}>Imprimir QR</button>
+          </div>
         </div>
       )}
 

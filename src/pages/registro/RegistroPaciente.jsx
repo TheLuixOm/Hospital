@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import FaceRegister from '../../components/FaceRegister';
 
 function RegistroPaciente() {
   const [paso, setPaso] = useState(1)
+  const [nuevoPacienteId, setNuevoPacienteId] = useState(null);
+  const [faceDescriptor, setFaceDescriptor] = useState(null);
+  const [faceError, setFaceError] = useState(null);
 
   // Datos de cuenta
   const [usuario, setUsuario] = useState('')
@@ -50,21 +54,20 @@ function RegistroPaciente() {
         })
       });
       const data = await res.json();
-      if (res.ok) {
-        alert('Paciente registrado con éxito');
-        setPaso(1);
-        setUsuario('');
-        setCorreo('');
-        setContrasena('');
-        setNombre('');
-        setApellido('');
-        setCedula('');
-        setTelefono('');
-        setFechaNacimiento('');
-        setTipoSangre('');
-        setAlergias('');
-        setEnfermedades('');
-        setDireccion('');
+      if (res.ok && data.message && data.message.includes('registrado')) {
+        // Buscar el paciente recién creado para obtener su _id
+        const buscar = await fetch(`http://localhost:5000/api/paciente/all`);
+        const lista = await buscar.json();
+        const recien = lista.find(p => p.usuario === usuario && p.email === correo);
+        if (recien && recien._id) {
+          setNuevoPacienteId(recien._id);
+          setPaso(3); // Paso de registro facial
+        } else {
+          alert('Paciente registrado, pero no se pudo iniciar registro facial.');
+          setPaso(1);
+        }
+        // Limpiar campos
+        setUsuario(''); setCorreo(''); setContrasena(''); setNombre(''); setApellido(''); setCedula(''); setTelefono(''); setFechaNacimiento(''); setTipoSangre(''); setAlergias(''); setEnfermedades(''); setDireccion('');
       } else {
         alert(data.message || 'Error en el registro');
       }
@@ -72,6 +75,31 @@ function RegistroPaciente() {
       alert('Error de conexión con el servidor');
     }
   }
+
+  // Guardar rostro en backend
+  const handleFaceRegister = async (descriptor) => {
+    setFaceError(null);
+    setFaceDescriptor(descriptor);
+    if (!nuevoPacienteId) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/paciente/face/${nuevoPacienteId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ faceDescriptor: Array.from(descriptor) })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('¡Rostro registrado exitosamente!');
+        setPaso(1);
+        setNuevoPacienteId(null);
+        setFaceDescriptor(null);
+      } else {
+        setFaceError(data.message || 'Error al guardar rostro');
+      }
+    } catch (err) {
+      setFaceError('Error de conexión con el servidor');
+    }
+  };
 
   return (
     <div style={styles.fondo}>
@@ -132,6 +160,14 @@ function RegistroPaciente() {
               <button type="submit" style={styles.boton}>Registrar</button>
             </div>
           </form>
+        )}
+
+        {paso === 3 && (
+          <div>
+            <h3 style={{textAlign:'center',marginBottom:'1rem'}}>Registro facial (opcional)</h3>
+            <FaceRegister onRegister={handleFaceRegister} error={faceError} />
+            <button style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer'}} onClick={()=>{setPaso(1);setNuevoPacienteId(null);}}>Omitir y finalizar</button>
+          </div>
         )}
       </div>
     </div>

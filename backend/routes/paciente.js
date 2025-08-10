@@ -1,8 +1,63 @@
-
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const Paciente = require('../models/Paciente');
 const router = express.Router();
+
+// Autenticación facial de paciente
+router.post('/login-facial', async (req, res) => {
+  try {
+    const { faceDescriptor } = req.body;
+    if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
+      return res.status(400).json({ message: 'Descriptor facial inválido.' });
+    }
+    // Buscar todos los pacientes con descriptor facial registrado
+    const pacientes = await Paciente.find({ faceDescriptor: { $exists: true, $ne: undefined } }, '-password');
+    // Comparar con cada descriptor facial guardado (distancia euclidiana)
+    let mejorPaciente = null;
+    let mejorDistancia = Infinity;
+    const euclideanDistance = (a, b) => {
+      if (!a || !b || a.length !== b.length) return Infinity;
+      return Math.sqrt(a.reduce((sum, val, i) => sum + Math.pow(val - b[i], 2), 0));
+    };
+    pacientes.forEach(p => {
+      if (Array.isArray(p.faceDescriptor) && p.faceDescriptor.length === faceDescriptor.length) {
+        const dist = euclideanDistance(p.faceDescriptor, faceDescriptor);
+        if (dist < mejorDistancia) {
+          mejorDistancia = dist;
+          mejorPaciente = p;
+        }
+      }
+    });
+    // Umbral típico para reconocimiento facial (ajustable)
+    const UMBRAL = 0.6;
+    if (mejorPaciente && mejorDistancia < UMBRAL) {
+      res.json({ message: 'Login facial exitoso', paciente: mejorPaciente });
+    } else {
+      res.status(401).json({ message: 'No se encontró coincidencia facial.' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error en la autenticación facial.' });
+  }
+});
+// Registrar o actualizar el rostro (faceDescriptor) de un paciente
+router.put('/face/:id', async (req, res) => {
+  try {
+    const { faceDescriptor } = req.body;
+    if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
+      return res.status(400).json({ message: 'Descriptor facial inválido.' });
+    }
+    const paciente = await Paciente.findByIdAndUpdate(
+      req.params.id,
+      { $set: { faceDescriptor } },
+      { new: true, select: '-password' }
+    );
+    if (!paciente) return res.status(404).json({ message: 'Paciente no encontrado.' });
+    res.json({ message: 'Rostro registrado/actualizado correctamente.', paciente });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al registrar rostro.' });
+  }
+});
+
 
 // Actualizar datos clínicos básicos del paciente
 router.put('/datos-clinicos/:id', async (req, res) => {
