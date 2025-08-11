@@ -152,7 +152,31 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Credenciales inválidas.' });
     }
-  res.json({ message: 'Login exitoso', paciente: { _id: paciente._id, nombre: paciente.nombre, apellido: paciente.apellido, usuario: paciente.usuario, email: paciente.email } });
+  // Enviar todos los campos relevantes uno por uno
+  res.json({
+    message: 'Login exitoso',
+    paciente: {
+      _id: paciente._id,
+      nombre: paciente.nombre,
+      apellido: paciente.apellido,
+      usuario: paciente.usuario,
+      email: paciente.email,
+      fechaNacimiento: paciente.fechaNacimiento,
+      telefono: paciente.telefono,
+      cedula: paciente.cedula,
+      tipoSangre: paciente.tipoSangre,
+      alergias: paciente.alergias,
+      enfermedades: paciente.enfermedades,
+      direccion: paciente.direccion,
+      antecedentesPersonales: paciente.antecedentesPersonales,
+      antecedentesFamiliares: paciente.antecedentesFamiliares,
+      medicamentosActuales: paciente.medicamentosActuales,
+      enfermedadesCronicas: paciente.enfermedadesCronicas,
+      vacunas: paciente.vacunas,
+      examenesMedicos: paciente.examenesMedicos,
+      faceDescriptor: paciente.faceDescriptor
+    }
+  });
   } catch (err) {
     res.status(500).json({ message: 'Error en el servidor.' });
   }

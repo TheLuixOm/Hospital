@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 import { FaSignOutAlt } from 'react-icons/fa';
 
 function PanelPaciente() {
+  const navigate = useNavigate();
   let paciente = null;
   try {
     paciente = JSON.parse(window.localStorage.getItem('paciente'));
@@ -83,18 +85,57 @@ function PanelPaciente() {
       )}
 
       <div style={styles.cardContainer}>
-        <div style={styles.card}>
+        <button
+          style={styles.cardBtn}
+          onClick={()=>navigate('/paciente/datosPersonales')}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#1976d2';
+            e.currentTarget.style.color = '#fff';
+            e.currentTarget.style.transform = 'scale(1.04)';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#f0f8ff';
+            e.currentTarget.style.color = '#222';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
           <h3>Datos Personales</h3>
           <p>Visualiza y edita tus datos personales y de contacto.</p>
-        </div>
-        <div style={styles.card}>
+        </button>
+        <button
+          style={styles.cardBtn}
+          onClick={()=>navigate('/paciente/historialMedico')}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#1976d2';
+            e.currentTarget.style.color = '#fff';
+            e.currentTarget.style.transform = 'scale(1.04)';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#f0f8ff';
+            e.currentTarget.style.color = '#222';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
           <h3>Historial Médico</h3>
           <p>Consulta tu historial de diagnósticos, alergias y enfermedades.</p>
-        </div>
-        <div style={styles.card}>
+        </button>
+        <button
+          style={styles.cardBtn}
+          onClick={()=>navigate('/paciente/configuracion')}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#1976d2';
+            e.currentTarget.style.color = '#fff';
+            e.currentTarget.style.transform = 'scale(1.04)';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#f0f8ff';
+            e.currentTarget.style.color = '#222';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
           <h3>Configuración</h3>
           <p>Actualiza tu contraseña y preferencias de cuenta.</p>
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -122,13 +163,21 @@ const styles = {
     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
     gap: '1.5rem',
   },
-  card: {
+  cardBtn: {
     backgroundColor: '#f0f8ff',
     padding: '1.5rem',
     borderRadius: '12px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    transition: 'transform 0.2s ease',
+    transition: 'transform 0.2s, background 0.2s',
+    cursor: 'pointer',
+    border: 'none',
+    outline: 'none',
+    font: 'inherit',
+    textAlign: 'left',
+    color: '#222',
+    margin: 0,
   },
+
 };
 
 export default PanelPaciente;
