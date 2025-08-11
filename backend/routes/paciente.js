@@ -1,7 +1,32 @@
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const Paciente = require('../models/Paciente');
 const router = express.Router();
+
+// Cambiar contraseña de paciente
+router.put('/cambiar-contrasena/:id', async (req, res) => {
+  try {
+    const { actual, nueva } = req.body;
+    if (!actual || !nueva) {
+      return res.status(400).json({ message: 'Faltan datos.' });
+    }
+    const paciente = await Paciente.findById(req.params.id);
+    if (!paciente) {
+      return res.status(404).json({ message: 'Paciente no encontrado.' });
+    }
+    const isMatch = await bcrypt.compare(actual, paciente.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'La contraseña actual es incorrecta.' });
+    }
+    const hashedPassword = await bcrypt.hash(nueva, 10);
+    paciente.password = hashedPassword;
+    await paciente.save();
+    res.json({ message: 'Contraseña actualizada correctamente.' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al cambiar la contraseña.' });
+  }
+});
 
 // Autenticación facial de paciente
 router.post('/login-facial', async (req, res) => {
