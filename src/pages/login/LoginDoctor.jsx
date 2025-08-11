@@ -91,7 +91,20 @@ function LoginDoctor() {
                 required
                 style={styles.input}
               />
-              <button type="submit" style={styles.button}>Iniciar Sesión</button>
+              <button
+                type="submit"
+                style={styles.button}
+                onMouseOver={e => {
+                  e.currentTarget.style.transform = 'scale(1.07)';
+                  e.currentTarget.style.background = '#125ea6';
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.background = '#1976d2';
+                }}
+              >
+                Iniciar Sesión
+              </button>
             </form>
             <button
               style={{
@@ -101,6 +114,14 @@ function LoginDoctor() {
                 width: '100%'
               }}
               onClick={() => setShowFaceLogin(true)}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#2e7031';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#43a047';
+              }}
             >
               Iniciar sesión con rostro
             </button>
@@ -159,7 +180,7 @@ const styles = {
     border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
+    transition: 'background-color 0.18s, transform 0.18s',
   },
   message: {
     marginTop: '1rem',

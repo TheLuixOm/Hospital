@@ -100,7 +100,20 @@ const LoginPaciente = () => {
               />
             </div>
 
-            <button type="submit" style={styles.button}>Iniciar Sesión</button>
+            <button
+              type="submit"
+              style={styles.button}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#005fa3';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#008cff';
+              }}
+            >
+              Iniciar Sesión
+            </button>
             <div style={styles.extraLinks}>
               <button type="button" style={{...styles.link,background:'none',border:'none',padding:0,cursor:'pointer'}} onClick={()=>setMostrarRecuperar(true)}>¿Olvidaste tu contraseña?</button>
             </div>
@@ -114,6 +127,14 @@ const LoginPaciente = () => {
                 width: '100%'
               }}
               onClick={()=>setMostrarFacial(true)}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#2e7031';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#43a047';
+              }}
             >
               Iniciar sesión con rostro
             </button>
@@ -176,7 +197,7 @@ const styles = {
     fontSize: '1rem',
     fontWeight: 'bold',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease'
+    transition: 'background-color 0.18s, transform 0.18s',
   },
   extraLinks: {
     marginTop: '1rem',

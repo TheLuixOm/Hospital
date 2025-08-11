@@ -7,7 +7,7 @@ const path = require('path');
 
 const router = express.Router();
 
-// Configuración de multer para subir archivos a /uploads
+// Configuracion de multer para subir archivos 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, '../uploads'));
@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Crear un nuevo examen medico (con o sin archivo)
+// Crear un nuevo examen medico
 router.post('/', upload.single('archivoAdjunto'), async (req, res) => {
   try {
     const { pacienteId, registroId, tipoExamen, fecha, resultados, observaciones } = req.body;
@@ -36,7 +36,7 @@ router.post('/', upload.single('archivoAdjunto'), async (req, res) => {
     await examen.save();
     // Relacionar con paciente
     await Paciente.findByIdAndUpdate(pacienteId, { $push: { examenesMedicos: examen._id } });
-    // Relacionar con historial si aplica
+    // Relacionar con historial 
     if (registroId) {
       await Historial.findByIdAndUpdate(registroId, { $push: { examenes: examen._id } });
     }
@@ -46,7 +46,7 @@ router.post('/', upload.single('archivoAdjunto'), async (req, res) => {
   }
 });
 
-// Listar examenes médicos de un paciente
+// Listar examenes medicos de un paciente
 router.get('/paciente/:pacienteId', async (req, res) => {
   try {
     const examenes = await ExamenMedico.find({ pacienteId: req.params.pacienteId });

@@ -59,7 +59,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* Tema claro automático si el usuario lo prefiere */
+
 @media (prefers-color-scheme: light) {
   :root {
     background-color: var(--color-bg-light);

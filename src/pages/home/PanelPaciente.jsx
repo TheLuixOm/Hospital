@@ -52,34 +52,78 @@ function PanelPaciente() {
           <QRCodeCanvas id="qr-canvas" value={paciente._id} size={200} level="H" includeMargin={true} />
           <div style={{marginTop:'1rem',fontSize:'0.95em',color:'#888'}}>Este QR es único y permanente. Puedes imprimirlo o guardarlo para ser escaneado por tu médico.</div>
           <div style={{marginTop:'1.5rem',display:'flex',gap:'1rem',justifyContent:'center'}}>
-            <button onClick={() => {
-              const canvas = document.getElementById('qr-canvas');
-              const url = canvas.toDataURL('image/png');
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `qr_paciente_${paciente._id}.png`;
-              a.click();
-            }} style={{padding:'0.5rem 1.2rem',borderRadius:8,border:'none',background:'#1976d2',color:'#fff',fontWeight:'bold',cursor:'pointer'}}>Descargar QR</button>
-            <button onClick={() => {
-              const canvas = document.getElementById('qr-canvas');
-              const dataUrl = canvas.toDataURL('image/png');
-              const win = window.open('', '_blank');
-              win.document.write(`
-                <html><head><title>Imprimir QR</title></head><body style='margin:0;padding:0;'>
-                  <img id='qrimg' src='${dataUrl}' style='width:200px;height:200px;display:block;margin:2rem auto' />
-                  <h3 style='text-align:center;font-family:sans-serif'>QR de paciente</h3>
-                  <script>
-                    var printQR = function() {
-                      window.focus();
-                      setTimeout(function(){ window.print(); }, 200);
-                    };
-                    var img = document.getElementById('qrimg');
-                    if (img.complete) printQR();
-                    else img.onload = printQR;
-                  <\/script>
-                </body></html>
-              `);
-            }} style={{padding:'0.5rem 1.2rem',borderRadius:8,border:'none',background:'#43a047',color:'#fff',fontWeight:'bold',cursor:'pointer'}}>Imprimir QR</button>
+            <button
+              onClick={() => {
+                const canvas = document.getElementById('qr-canvas');
+                const url = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `qr_paciente_${paciente._id}.png`;
+                a.click();
+              }}
+              style={{
+                padding:'0.5rem 1.2rem',
+                borderRadius:8,
+                border:'none',
+                background:'#1976d2',
+                color:'#fff',
+                fontWeight:'bold',
+                cursor:'pointer',
+                transition:'transform 0.18s, background 0.18s',
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#125ea6';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#1976d2';
+              }}
+            >
+              Descargar QR
+            </button>
+            <button
+              onClick={() => {
+                const canvas = document.getElementById('qr-canvas');
+                const dataUrl = canvas.toDataURL('image/png');
+                const win = window.open('', '_blank');
+                win.document.write(`
+                  <html><head><title>Imprimir QR</title></head><body style='margin:0;padding:0;'>
+                    <img id='qrimg' src='${dataUrl}' style='width:200px;height:200px;display:block;margin:2rem auto' />
+                    <h3 style='text-align:center;font-family:sans-serif'>QR de paciente</h3>
+                    <script>
+                      var printQR = function() {
+                        window.focus();
+                        setTimeout(function(){ window.print(); }, 200);
+                      };
+                      var img = document.getElementById('qrimg');
+                      if (img.complete) printQR();
+                      else img.onload = printQR;
+                    <\/script>
+                  </body></html>
+                `);
+              }}
+              style={{
+                padding:'0.5rem 1.2rem',
+                borderRadius:8,
+                border:'none',
+                background:'#43a047',
+                color:'#fff',
+                fontWeight:'bold',
+                cursor:'pointer',
+                transition:'transform 0.18s, background 0.18s',
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#2e7031';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#43a047';
+              }}
+            >
+              Imprimir QR
+            </button>
           </div>
         </div>
       )}
