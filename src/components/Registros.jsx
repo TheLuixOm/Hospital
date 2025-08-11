@@ -31,7 +31,6 @@ function Registros() {
 
   return (
     <div style={{marginTop:'2rem'}}>
-      <button onClick={() => navigate('/panel-doctor')} style={{marginBottom:'1.5rem',padding:'0.6rem 1.2rem',borderRadius:'8px',background:'#1976d2',color:'#fff',border:'none',fontWeight:'bold'}}>Atrás</button>
       <h2 style={{textAlign:'center'}}>Registros de {paciente?.nombre} {paciente?.apellido}</h2>
 
       {/* Datos clínicos básicos */}

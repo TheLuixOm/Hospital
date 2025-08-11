@@ -16,7 +16,7 @@ function PanelPaciente() {
         <button
           onClick={() => {
             window.localStorage.removeItem('paciente');
-            window.location.href = '/login-paciente';
+            window.location.href = '/';
           }}
           style={{
             position:'absolute',

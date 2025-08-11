@@ -1,68 +1,117 @@
 import React, { useState } from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const navigate = useNavigate();
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const [mostrarLogin, setMostrarLogin] = useState(false);
+  // Estado de sesión
+  const paciente = localStorage.getItem('paciente');
+  const doctor = localStorage.getItem('doctor');
+  const location = window.location.pathname;
+
+  // Detectar si estamos en el inicio
+  const esInicio = location === '/';
+  // Detectar si el usuario está logueado
+  const logueado = paciente || doctor;
+  // Mostrar botón atrás en otras vistas si está logueado, excepto en paneles
+  const paneles = ['/panel-paciente', '/panel-doctor'];
+  const mostrarAtras = logueado && !esInicio && !paneles.includes(location);
 
   return (
     <nav style={styles.nav}>
-      <h3 style={styles.title} onClick={() => navigate('/')}>
+      <h3 style={styles.title} onClick={() => navigate('/')}> 
         MediDataOS
       </h3>
       <div style={styles.menuContainer}>
-        <button onClick={() => navigate('/')} style={styles.button}>
-          Inicio
-        </button>
-
-        <div
-          style={styles.dropdown}
-          onMouseEnter={() => setMostrarRegistro(true)}
-          onMouseLeave={() => setMostrarRegistro(false)}
-        >
-          <button style={styles.button}>Registro ▾</button>
-          {mostrarRegistro && (
-            <div style={styles.dropdownContent}>
-              <button
-                style={styles.dropdownItem}
-                onClick={() => navigate('/registro-paciente')}
-              >
-                Paciente
-              </button>
-              <button
-                style={styles.dropdownItem}
-                onClick={() => navigate('/registro-doctor')}
-              >
-                Doctor
-              </button>
+        {esInicio && (
+          <>
+            <button onClick={() => navigate('/')} style={styles.button}>
+              Inicio
+            </button>
+            <div
+              style={styles.dropdown}
+              onMouseEnter={() => setMostrarLogin(true)}
+              onMouseLeave={() => setMostrarLogin(false)}
+            >
+              <button style={styles.button}>Iniciar Sesión ▾</button>
+              {mostrarLogin && (
+                <div style={styles.dropdownContent}>
+                  <button
+                    style={styles.dropdownItem}
+                    onClick={() => navigate('/login-paciente')}
+                  >
+                    Paciente
+                  </button>
+                  <button
+                    style={styles.dropdownItem}
+                    onClick={() => navigate('/login-doctor')}
+                  >
+                    Doctor
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-
-        <div
-          style={styles.dropdown}
-          onMouseEnter={() => setMostrarLogin(true)}
-          onMouseLeave={() => setMostrarLogin(false)}
-        >
-          <button style={styles.button}>Iniciar Sesión ▾</button>
-          {mostrarLogin && (
-            <div style={styles.dropdownContent}>
-              <button
-                style={styles.dropdownItem}
-                onClick={() => navigate('/login-paciente')}
-              >
-                Paciente
-              </button>
-              <button
-                style={styles.dropdownItem}
-                onClick={() => navigate('/login-doctor')}
-              >
-                Doctor
-              </button>
+            <div
+              style={styles.dropdown}
+              onMouseEnter={() => setMostrarRegistro(true)}
+              onMouseLeave={() => setMostrarRegistro(false)}
+            >
+              <button style={styles.button}>Registro ▾</button>
+              {mostrarRegistro && (
+                <div style={styles.dropdownContent}>
+                  <button
+                    style={styles.dropdownItem}
+                    onClick={() => navigate('/registro-paciente')}
+                  >
+                    Paciente
+                  </button>
+                  <button
+                    style={styles.dropdownItem}
+                    onClick={() => navigate('/registro-doctor')}
+                  >
+                    Doctor
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        )}
+        {mostrarAtras && (
+          <button
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.3rem',
+              background: '#1976d2',
+              color: '#fff',
+              fontWeight: '500',
+              boxShadow: '0 2px 8px rgba(33,150,243,0.10)',
+              border: 'none',
+              fontSize: '0.98rem',
+              padding: '0.35rem 0.9rem',
+              borderRadius: '16px',
+              transition: 'background 0.18s, box-shadow 0.22s, transform 0.22s',
+              minWidth: 'auto',
+              height: '2.1rem',
+            }}
+            onClick={() => navigate(-1)}
+            onMouseOver={e => {
+              e.currentTarget.style.background = '#1565c0';
+              e.currentTarget.style.boxShadow = '0 6px 18px rgba(33,150,243,0.18)';
+              e.currentTarget.style.transform = 'scale(1.08)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.background = '#1976d2';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(33,150,243,0.10)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <FaArrowLeft size={15} style={{marginRight:'0.1rem'}} />
+            Atrás
+          </button>
+        )}
       </div>
     </nav>
   );

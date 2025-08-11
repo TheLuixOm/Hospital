@@ -38,9 +38,9 @@ function PanelDoctor({ onCerrarSesion }) {
   }, [medicoId]);
 
   const handleCerrarSesion = () => {
-    window.localStorage.removeItem('medicoId');
-    if (onCerrarSesion) onCerrarSesion();
-    window.location.href = '/login-doctor';
+  window.localStorage.removeItem('medicoId');
+  if (onCerrarSesion) onCerrarSesion();
+  window.location.href = '/';
   };
 
   if (sesionInvalida) {
