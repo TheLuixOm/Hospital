@@ -28,8 +28,34 @@ function Inicio() {
       <section style={styles.loginButtons}>
   <h2 style={styles.loginTitle}>Acceso Rápido</h2>
   <div style={styles.loginOptions}>
-    <button onClick={() => navigate('/login-doctor')} style={styles.loginBtnDoctor}>👨‍⚕️ Iniciar como Doctor</button>
-    <button onClick={() => navigate('/login-paciente')} style={styles.loginBtnPaciente}>🧑‍⚕️ Iniciar como Paciente</button>
+    <button
+      onClick={() => navigate('/login-doctor')}
+      style={styles.loginBtnDoctor}
+      onMouseOver={e => {
+        e.currentTarget.style.transform = 'scale(1.08)';
+        e.currentTarget.style.background = '#125ea6';
+      }}
+      onMouseOut={e => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.background = '#1976d2';
+      }}
+    >
+      👨‍⚕️ Iniciar como Doctor
+    </button>
+    <button
+      onClick={() => navigate('/login-paciente')}
+      style={styles.loginBtnPaciente}
+      onMouseOver={e => {
+        e.currentTarget.style.transform = 'scale(1.08)';
+        e.currentTarget.style.background = '#2286c3';
+      }}
+      onMouseOut={e => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.background = '#64b5f6';
+      }}
+    >
+      🧑‍⚕️ Iniciar como Paciente
+    </button>
   </div>
   </section>
 
@@ -298,28 +324,28 @@ loginOptions: {
   gap: '2rem',
   flexWrap: 'wrap',
 },
-loginBtnDoctor: {
-  backgroundColor: '#1976d2',
-  color: '#fff',
-  border: 'none',
-  padding: '1rem 2rem',
-  borderRadius: '12px',
-  fontSize: '1rem',
-  fontWeight: '600',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s',
-},
-loginBtnPaciente: {
-  backgroundColor: '#64b5f6',
-  color: '#fff',
-  border: 'none',
-  padding: '1rem 2rem',
-  borderRadius: '12px',
-  fontSize: '1rem',
-  fontWeight: '600',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s',
-},
+  loginBtnDoctor: {
+    backgroundColor: '#1976d2',
+    color: '#fff',
+    border: 'none',
+    padding: '1rem 2rem',
+    borderRadius: '12px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'background-color 0.18s, transform 0.18s',
+  },
+  loginBtnPaciente: {
+    backgroundColor: '#64b5f6',
+    color: '#fff',
+    border: 'none',
+    padding: '1rem 2rem',
+    borderRadius: '12px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'background-color 0.18s, transform 0.18s',
+  },
 
 };
 

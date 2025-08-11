@@ -117,7 +117,20 @@ function RegistroPaciente() {
             <label style={styles.label}>Contraseña:</label>
             <input type="password" value={contrasena} onChange={e => setContrasena(e.target.value)} style={styles.input} required />
 
-            <button type="submit" style={styles.boton}>Siguiente</button>
+            <button
+              type="submit"
+              style={styles.boton}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#005fa3';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#008cff';
+              }}
+            >
+              Siguiente
+            </button>
           </form>
         )}
 
@@ -156,8 +169,35 @@ function RegistroPaciente() {
             <textarea value={direccion} onChange={e => setDireccion(e.target.value)} style={styles.textarea} rows={3}></textarea>
 
             <div style={styles.actions}>
-              <button type="button" onClick={() => setPaso(1)} style={styles.volver}>Atrás</button>
-              <button type="submit" style={styles.boton}>Registrar</button>
+              <button
+                type="button"
+                onClick={() => setPaso(1)}
+                style={styles.volver}
+                onMouseOver={e => {
+                  e.currentTarget.style.transform = 'scale(1.07)';
+                  e.currentTarget.style.background = '#b0b0b0';
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.background = '#cccccc';
+                }}
+              >
+                Atrás
+              </button>
+              <button
+                type="submit"
+                style={styles.boton}
+                onMouseOver={e => {
+                  e.currentTarget.style.transform = 'scale(1.07)';
+                  e.currentTarget.style.background = '#005fa3';
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.background = '#008cff';
+                }}
+              >
+                Registrar
+              </button>
             </div>
           </form>
         )}
@@ -166,7 +206,20 @@ function RegistroPaciente() {
           <div>
             <h3 style={{textAlign:'center',marginBottom:'1rem'}}>Registro facial (opcional)</h3>
             <FaceRegister onRegister={handleFaceRegister} error={faceError} />
-            <button style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer'}} onClick={()=>{setPaso(1);setNuevoPacienteId(null);}}>Omitir y finalizar</button>
+            <button
+              style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer',transition:'background 0.18s, transform 0.18s'}} 
+              onClick={()=>{setPaso(1);setNuevoPacienteId(null);}}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#b0b0b0';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#ccc';
+              }}
+            >
+              Omitir y finalizar
+            </button>
           </div>
         )}
       </div>
@@ -242,7 +295,8 @@ const styles = {
     fontSize: '1rem',
     fontWeight: 'bold',
     cursor: 'pointer',
-    marginTop: '1rem'
+    marginTop: '1rem',
+    transition: 'background 0.18s, transform 0.18s'
   },
   volver: {
     backgroundColor: '#cccccc',
@@ -254,7 +308,8 @@ const styles = {
     fontWeight: 'bold',
     cursor: 'pointer',
     marginTop: '1rem',
-    marginRight: '1rem'
+    marginRight: '1rem',
+    transition: 'background 0.18s, transform 0.18s'
   },
   actions: {
     display: 'flex',

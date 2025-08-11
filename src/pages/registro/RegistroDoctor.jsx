@@ -171,7 +171,18 @@ function RegistroDoctor({ cambiarVista }) {
               style={styles.input}
               required
             />
-            <button type="submit" style={styles.boton}>
+            <button
+              type="submit"
+              style={styles.boton}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#005fa3';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#008cff';
+              }}
+            >
               Registrarse
             </button>
           </form>
@@ -180,7 +191,20 @@ function RegistroDoctor({ cambiarVista }) {
           <div>
             <h3 style={{textAlign:'center',marginBottom:'1rem'}}>Registro facial (opcional)</h3>
             <FaceRegister onRegister={handleFaceRegister} error={faceError} />
-            <button style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer'}} onClick={()=>{setPaso(1);setDoctorId(null);}}>Omitir y finalizar</button>
+            <button
+              style={{marginTop:'2rem',background:'#ccc',color:'#333',padding:'0.7rem 1.5rem',border:'none',borderRadius:8,cursor:'pointer',transition:'background 0.18s, transform 0.18s'}} 
+              onClick={()=>{setPaso(1);setDoctorId(null);}}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.07)';
+                e.currentTarget.style.background = '#b0b0b0';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#ccc';
+              }}
+            >
+              Omitir y finalizar
+            </button>
           </div>
         )}
       </div>
@@ -238,7 +262,7 @@ const styles = {
     fontSize: '1rem',
     fontWeight: 'bold',
     cursor: 'pointer',
-    transition: 'background 0.3s ease'
+    transition: 'background 0.18s, transform 0.18s'
   }
 };
 
