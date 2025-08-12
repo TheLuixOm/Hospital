@@ -3,39 +3,81 @@ import fondoCarnet from '/fondo-carnet.png';
 import { QRCodeCanvas } from 'qrcode.react';
 
 function CarnetMedico() {
-  const paciente = JSON.parse(window.localStorage.getItem('paciente')) || {};
-  const [foto, setFoto] = useState(paciente.fotoPerfil || window.localStorage.getItem('fotoPerfil') || null);
-  const [fotoSubida, setFotoSubida] = useState(!!(paciente.fotoPerfil || window.localStorage.getItem('fotoPerfil')));
+  const API_URL = 'http://localhost:5000';
+  const [paciente, setPaciente] = useState(JSON.parse(window.localStorage.getItem('paciente')) || {});
+  const [foto, setFoto] = useState(paciente.fotoPerfil ? `${API_URL}/uploads/usuarios/${paciente.fotoPerfil.split('/').pop()}` : null);
+  const [fotoSubida, setFotoSubida] = useState(!!paciente.fotoPerfil);
+  const [errorFoto, setErrorFoto] = useState('');
+
+  // Obtener datos actualizados del paciente al cargar la página
+  React.useEffect(() => {
+    if (paciente._id) {
+      fetch(`${API_URL}/api/paciente/${paciente._id}`)
+        .then(res => res.json())
+        .then(data => {
+          setPaciente(data);
+          if (data.fotoPerfil) {
+            setFoto(`${API_URL}/uploads/usuarios/${data.fotoPerfil.split('/').pop()}`);
+            setFotoSubida(true);
+          }
+          window.localStorage.setItem('paciente', JSON.stringify(data));
+        });
+    }
+  }, []);
   const carnetDivRef = useRef(null);
 
   const handleFotoChange = async e => {
+    setErrorFoto('');
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = async ev => {
-        setFoto(ev.target.result);
-        setFotoSubida(true);
-        window.localStorage.setItem('fotoPerfil', ev.target.result);
-        // Guardar en backend
-        try {
-          await fetch(`${process.env.REACT_APP_API_URL || ''}/api/paciente/foto-perfil/${paciente._id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ fotoPerfil: ev.target.result })
-          });
-        } catch (err) {
-          // Puedes mostrar un mensaje de error si lo deseas
+      const formData = new FormData();
+      formData.append('fotoPerfil', file);
+      try {
+        const res = await fetch(`${API_URL}/api/paciente/foto-perfil/${paciente._id}`, {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setFoto(`${API_URL}/uploads/usuarios/${data.fotoPerfil.split('/').pop()}`);
+          setFotoSubida(true);
+          // Actualizar paciente en localStorage y estado
+          const pacienteActualizado = { ...paciente, fotoPerfil: data.fotoPerfil };
+          setPaciente(pacienteActualizado);
+          window.localStorage.setItem('paciente', JSON.stringify(pacienteActualizado));
+        } else {
+          const errorData = await res.json();
+          setErrorFoto(errorData.message || 'Error al subir la foto.');
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        setErrorFoto('Error de conexión al subir la foto.');
+      }
     }
   };
 
   // Descargar carnet como imagen PNG usando html2canvas
   const handleDescargar = async () => {
     if (!carnetDivRef.current) return;
+    // Convertir la imagen de perfil a base64 antes de renderizar
+    const imgEl = carnetDivRef.current.querySelector('img');
+    if (imgEl && foto && !foto.startsWith('data:')) {
+      const toDataURL = url => new Promise(resolve => {
+        const xhr = new window.XMLHttpRequest();
+        xhr.onload = function() {
+          const reader = new window.FileReader();
+          reader.onloadend = function() {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+      });
+      const base64Foto = await toDataURL(foto);
+      imgEl.srcBackup = imgEl.src;
+      imgEl.src = base64Foto;
+    }
     const html2canvas = (await import('html2canvas')).default;
     html2canvas(carnetDivRef.current, { scale: 2 }).then(canvas => {
       const url = canvas.toDataURL('image/png');
@@ -43,6 +85,11 @@ function CarnetMedico() {
       a.href = url;
       a.download = `carnet_medico_${paciente._id || ''}.png`;
       a.click();
+      // Restaurar src original después de descargar
+      if (imgEl && imgEl.srcBackup) {
+        imgEl.src = imgEl.srcBackup;
+        delete imgEl.srcBackup;
+      }
     });
   };
 
@@ -80,6 +127,7 @@ function CarnetMedico() {
       minHeight:'100vh',
       background:'#f5f7fa',
     }}>
+      {errorFoto && <div style={{color:'#e74c3c',marginBottom:'1rem',fontWeight:'bold'}}>{errorFoto}</div>}
       <h2 style={{color:'#1976d2',fontWeight:'bold',marginBottom:'2.2rem',marginTop:'0.5rem'}}>Carnet Médico</h2>
       <p style={{maxWidth:'400px',textAlign:'center',color:'#333',marginBottom:'2.2rem',fontSize:'1rem'}}>
         Este carnet te permite identificarte como paciente, mostrar tu información médica básica y tu código QR para consultas rápidas.

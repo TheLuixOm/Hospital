@@ -3,17 +3,31 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const Paciente = require('../models/Paciente');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
-// Actualizar foto de perfil del paciente
-router.put('/foto-perfil/:id', async (req, res) => {
+// Configuración de multer para guardar en /uploads/usuarios
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploads/usuarios'));
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, `${req.params.id}${ext}`);
+  }
+});
+const upload = multer({ storage });
+
+// Subir foto de perfil del paciente (archivo)
+router.post('/foto-perfil/:id', upload.single('fotoPerfil'), async (req, res) => {
   try {
-    const { fotoPerfil } = req.body;
-    if (!fotoPerfil) {
+    if (!req.file) {
       return res.status(400).json({ message: 'No se envió la foto.' });
     }
+    const fotoPath = `/uploads/usuarios/${req.file.filename}`;
     const paciente = await Paciente.findByIdAndUpdate(
       req.params.id,
-      { fotoPerfil },
+      { fotoPerfil: fotoPath },
       { new: true }
     );
     if (!paciente) {
