@@ -139,25 +139,84 @@ function RegistroPaciente() {
             <div style={styles.row}>
               <div style={styles.column}>
                 <label style={styles.label}>Nombre:</label>
-                <input value={nombre} onChange={e => setNombre(e.target.value)} style={styles.input} required />
+                <input
+                  value={nombre}
+                  onChange={e => {
+                    // Solo permitir letras y espacios
+                    const val = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, '');
+                    setNombre(val);
+                  }}
+                  style={styles.input}
+                  required
+                  maxLength={40}
+                />
               </div>
               <div style={styles.column}>
                 <label style={styles.label}>Apellido:</label>
-                <input value={apellido} onChange={e => setApellido(e.target.value)} style={styles.input} required />
+                <input
+                  value={apellido}
+                  onChange={e => {
+                    // Solo permitir letras y espacios
+                    const val = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, '');
+                    setApellido(val);
+                  }}
+                  style={styles.input}
+                  required
+                  maxLength={40}
+                />
               </div>
             </div>
 
             <label style={styles.label}>Cédula:</label>
-            <input value={cedula} onChange={e => setCedula(e.target.value)} style={styles.input} required />
+            <input
+              value={cedula}
+              onChange={e => {
+                // Solo permitir números
+                const val = e.target.value.replace(/[^0-9]/g, '');
+                setCedula(val);
+              }}
+              style={styles.input}
+              required
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={8}
+            />
 
             <label style={styles.label}>Teléfono:</label>
-            <input value={telefono} onChange={e => setTelefono(e.target.value)} style={styles.input} required />
+            <input
+              value={telefono}
+              onChange={e => {
+                let val = e.target.value;
+                // Permitir solo un + al inicio y el resto solo números
+                if (val.startsWith('+')) {
+                  val = '+' + val.slice(1).replace(/[^0-9]/g, '');
+                } else {
+                  val = val.replace(/[^0-9]/g, '');
+                }
+                setTelefono(val);
+              }}
+              style={styles.input}
+              required
+              inputMode="tel"
+              pattern="^\+?[0-9]{7,15}$"
+              maxLength={16}
+            />
 
             <label style={styles.label}>Fecha de nacimiento:</label>
             <input type="date" value={fechaNacimiento} onChange={e => setFechaNacimiento(e.target.value)} style={styles.input} required />
 
             <label style={styles.label}>Tipo de sangre:</label>
-            <input value={tipoSangre} onChange={e => setTipoSangre(e.target.value)} style={styles.input} required />
+            <select value={tipoSangre} onChange={e => setTipoSangre(e.target.value)} style={styles.input} required>
+              <option value="" disabled>Selecciona tu tipo de sangre</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
 
             <label style={styles.label}>Alergias:</label>
             <input value={alergias} onChange={e => setAlergias(e.target.value)} style={styles.input} />

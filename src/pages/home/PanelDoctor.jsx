@@ -27,7 +27,7 @@ function PanelDoctor({ onCerrarSesion }) {
       setSesionInvalida(true);
     } else {
       setSesionInvalida(false);
-      // Intentar leer datos del doctor
+      
       try {
         const d = JSON.parse(window.localStorage.getItem('doctor'));
         if (d && d.nombre && d.apellido) {

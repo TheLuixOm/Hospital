@@ -104,18 +104,26 @@ function RegistroDoctor({ cambiarVista }) {
               name="nombre"
               placeholder="Nombre"
               value={formulario.nombre}
-              onChange={manejarCambio}
+              onChange={e => {
+                const val = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, '');
+                manejarCambio({ target: { name: 'nombre', value: val } });
+              }}
               style={styles.input}
               required
+              maxLength={40}
             />
             <input
               type="text"
               name="apellido"
               placeholder="Apellido"
               value={formulario.apellido}
-              onChange={manejarCambio}
+              onChange={e => {
+                const val = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, '');
+                manejarCambio({ target: { name: 'apellido', value: val } });
+              }}
               style={styles.input}
               required
+              maxLength={40}
             />
             <label style={styles.label}>Fecha de nacimiento:</label>
             <input
@@ -140,9 +148,20 @@ function RegistroDoctor({ cambiarVista }) {
               name="telefono"
               placeholder="Teléfono"
               value={formulario.telefono}
-              onChange={manejarCambio}
+              onChange={e => {
+                let val = e.target.value;
+                if (val.startsWith('+')) {
+                  val = '+' + val.slice(1).replace(/[^0-9]/g, '');
+                } else {
+                  val = val.replace(/[^0-9]/g, '');
+                }
+                manejarCambio({ target: { name: 'telefono', value: val } });
+              }}
               style={styles.input}
               required
+              inputMode="tel"
+              pattern="^\+?[0-9]{7,15}$"
+              maxLength={16}
             />
             <input
               type="text"

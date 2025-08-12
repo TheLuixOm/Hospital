@@ -6,7 +6,7 @@ function Navbar() {
   const navigate = useNavigate();
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const [mostrarLogin, setMostrarLogin] = useState(false);
-  // Estado de sesión
+  // Estado de sesion
   const paciente = localStorage.getItem('paciente');
   const doctor = localStorage.getItem('doctor');
   const location = window.location.pathname;
