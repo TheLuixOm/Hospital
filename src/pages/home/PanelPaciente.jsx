@@ -165,6 +165,23 @@ function PanelPaciente() {
         </button>
         <button
           style={styles.cardBtn}
+          onClick={()=>navigate('/paciente/carnetMedico')}
+          onMouseOver={e => {
+            e.currentTarget.style.background = '#1976d2';
+            e.currentTarget.style.color = '#fff';
+            e.currentTarget.style.transform = 'scale(1.04)';
+          }}
+          onMouseOut={e => {
+            e.currentTarget.style.background = '#f0f8ff';
+            e.currentTarget.style.color = '#222';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          <h3>Carnet Médico</h3>
+          <p>Consulta y descarga tu carnet médico digital.</p>
+        </button>
+        <button
+          style={styles.cardBtn}
           onClick={()=>navigate('/paciente/configuracion')}
           onMouseOver={e => {
             e.currentTarget.style.background = '#1976d2';

@@ -4,6 +4,28 @@ const bcrypt = require('bcryptjs');
 const Paciente = require('../models/Paciente');
 const router = express.Router();
 
+// Actualizar foto de perfil del paciente
+router.put('/foto-perfil/:id', async (req, res) => {
+  try {
+    const { fotoPerfil } = req.body;
+    if (!fotoPerfil) {
+      return res.status(400).json({ message: 'No se envió la foto.' });
+    }
+    const paciente = await Paciente.findByIdAndUpdate(
+      req.params.id,
+      { fotoPerfil },
+      { new: true }
+    );
+    if (!paciente) {
+      return res.status(404).json({ message: 'Paciente no encontrado.' });
+    }
+    res.json({ message: 'Foto actualizada.', fotoPerfil: paciente.fotoPerfil });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al actualizar la foto.' });
+  }
+});
+
+
 // Cambiar contraseña de paciente
 router.put('/cambiar-contrasena/:id', async (req, res) => {
   try {

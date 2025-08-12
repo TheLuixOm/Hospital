@@ -20,6 +20,7 @@ const PacienteSchema = new mongoose.Schema({
   direccion: { type: String },
   examenesMedicos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ExamenMedico' }],
   faceDescriptor: { type: [Number], default: undefined }, // embedding facial opcional
+  fotoPerfil: { type: String }, // base64 o url
 });
 
 module.exports = mongoose.model('Paciente', PacienteSchema);

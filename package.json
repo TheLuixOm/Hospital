@@ -12,6 +12,7 @@
   "dependencies": {
     "face-api.js": "^0.22.2",
     "framer-motion": "^12.23.12",
+    "html2canvas": "^1.4.1",
     "html5-qrcode": "^2.3.8",
     "qrcode.react": "^4.2.0",
     "react": "^19.1.0",

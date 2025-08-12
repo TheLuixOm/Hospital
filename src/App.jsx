@@ -15,6 +15,7 @@ import Configuracion from './pages/paciente/Configuracion';
 
 import ConfiguracionDoctor from './pages/doctor/ConfiguracionDoctor';
 import Registros from './components/Registros';
+import CarnetMedico from './pages/paciente/CarnetMedico';
 
 
 function AnimatedRoutes() {
@@ -75,6 +76,11 @@ function AnimatedRoutes() {
         <Route path="/paciente/configuracion" element={
           <motion.div initial={{opacity:0, y:30}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-30}} transition={{duration:0.35}}>
             <Configuracion />
+          </motion.div>
+        } />
+        <Route path="/paciente/carnetMedico" element={
+          <motion.div initial={{opacity:0, y:30}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-30}} transition={{duration:0.35}}>
+            <CarnetMedico />
           </motion.div>
         } />
         <Route path="/registros/:id" element={

@@ -11,11 +11,8 @@ function Navbar() {
   const doctor = localStorage.getItem('doctor');
   const location = window.location.pathname;
 
-  // Detectar si estamos en el inicio
   const esInicio = location === '/';
-  // Detectar si el usuario está logueado
   const logueado = paciente || doctor;
-  // Mostrar botón atrás en otras vistas si está logueado, excepto en paneles
   const paneles = ['/panel-paciente', '/panel-doctor'];
   const mostrarAtras = logueado && !esInicio && !paneles.includes(location);
 
