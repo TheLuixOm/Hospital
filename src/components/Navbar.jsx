@@ -24,22 +24,6 @@ function Navbar() {
       <div style={styles.menuContainer}>
         {esInicio && (
           <>
-              <button
-                onClick={() => navigate('/')}
-                style={styles.button}
-                onMouseOver={e => {
-                  e.currentTarget.style.background = '#1976d2';
-                  e.currentTarget.style.transform = 'scale(1.07)';
-                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(33,150,243,0.18)';
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.background = '#64b5f6';
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 1px 6px rgba(33,150,243,0.10)';
-                }}
-              >
-                Inicio
-              </button>
             <div
               style={styles.dropdown}
               onMouseEnter={() => setMostrarLogin(true)}

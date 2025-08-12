@@ -95,8 +95,8 @@ function Inicio() {
         </div>
         <div style={styles.serviceCard}>
           <span style={styles.serviceIcon}>💬</span>
-          <div style={styles.serviceTitle}>Ayuda en Línea</div>
-          <div style={styles.serviceDesc}>Soporte y asesoría médica digital.</div>
+          <div style={styles.serviceTitle}>Soporte y ayuda</div>
+          <div style={styles.serviceDesc}>Soporte.</div>
         </div>
       </section>
 
