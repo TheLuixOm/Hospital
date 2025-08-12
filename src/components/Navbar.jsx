@@ -27,9 +27,22 @@ function Navbar() {
       <div style={styles.menuContainer}>
         {esInicio && (
           <>
-            <button onClick={() => navigate('/')} style={styles.button}>
-              Inicio
-            </button>
+              <button
+                onClick={() => navigate('/')}
+                style={styles.button}
+                onMouseOver={e => {
+                  e.currentTarget.style.background = '#1976d2';
+                  e.currentTarget.style.transform = 'scale(1.07)';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(33,150,243,0.18)';
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.background = '#64b5f6';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 1px 6px rgba(33,150,243,0.10)';
+                }}
+              >
+                Inicio
+              </button>
             <div
               style={styles.dropdown}
               onMouseEnter={() => setMostrarLogin(true)}
@@ -38,18 +51,38 @@ function Navbar() {
               <button style={styles.button}>Iniciar Sesión ▾</button>
               {mostrarLogin && (
                 <div style={styles.dropdownContent}>
-                  <button
-                    style={styles.dropdownItem}
-                    onClick={() => navigate('/login-paciente')}
-                  >
-                    Paciente
-                  </button>
-                  <button
-                    style={styles.dropdownItem}
-                    onClick={() => navigate('/login-doctor')}
-                  >
-                    Doctor
-                  </button>
+                    <button
+                      style={styles.dropdownItem}
+                      onClick={() => navigate('/login-paciente')}
+                      onMouseOver={e => {
+                        e.currentTarget.style.background = '#bbdefb';
+                        e.currentTarget.style.color = '#1565c0';
+                        e.currentTarget.style.transform = 'scale(1.06)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#1976d2';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Paciente
+                    </button>
+                    <button
+                      style={styles.dropdownItem}
+                      onClick={() => navigate('/login-doctor')}
+                      onMouseOver={e => {
+                        e.currentTarget.style.background = '#bbdefb';
+                        e.currentTarget.style.color = '#1565c0';
+                        e.currentTarget.style.transform = 'scale(1.06)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#1976d2';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Doctor
+                    </button>
                 </div>
               )}
             </div>
@@ -61,18 +94,38 @@ function Navbar() {
               <button style={styles.button}>Registro ▾</button>
               {mostrarRegistro && (
                 <div style={styles.dropdownContent}>
-                  <button
-                    style={styles.dropdownItem}
-                    onClick={() => navigate('/registro-paciente')}
-                  >
-                    Paciente
-                  </button>
-                  <button
-                    style={styles.dropdownItem}
-                    onClick={() => navigate('/registro-doctor')}
-                  >
-                    Doctor
-                  </button>
+                    <button
+                      style={styles.dropdownItem}
+                      onClick={() => navigate('/registro-paciente')}
+                      onMouseOver={e => {
+                        e.currentTarget.style.background = '#bbdefb';
+                        e.currentTarget.style.color = '#1565c0';
+                        e.currentTarget.style.transform = 'scale(1.06)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#1976d2';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Paciente
+                    </button>
+                    <button
+                      style={styles.dropdownItem}
+                      onClick={() => navigate('/registro-doctor')}
+                      onMouseOver={e => {
+                        e.currentTarget.style.background = '#bbdefb';
+                        e.currentTarget.style.color = '#1565c0';
+                        e.currentTarget.style.transform = 'scale(1.06)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#1976d2';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Doctor
+                    </button>
                 </div>
               )}
             </div>

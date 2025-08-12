@@ -12,6 +12,8 @@ import PanelPaciente from './pages/home/PanelPaciente';
 import DatosPersonales from './pages/paciente/DatosPersonales';
 import HistorialMedico from './pages/paciente/HistorialMedico';
 import Configuracion from './pages/paciente/Configuracion';
+
+import ConfiguracionDoctor from './pages/doctor/ConfiguracionDoctor';
 import Registros from './components/Registros';
 
 
@@ -20,6 +22,11 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+        <Route path="/doctor/configuracion" element={
+          <motion.div initial={{opacity:0, y:30}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-30}} transition={{duration:0.35}}>
+            <ConfiguracionDoctor />
+          </motion.div>
+        } />
         <Route path="/" element={
           <motion.div initial={{opacity:0, y:30}} animate={{opacity:1, y:0}} exit={{opacity:0, y:-30}} transition={{duration:0.35}}>
             <Inicio />

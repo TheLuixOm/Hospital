@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 function FormDatosClinicos({ paciente, onActualizado }) {
   const [form, setForm] = useState({
+    tipoSangre: paciente?.tipoSangre || '',
     antecedentesPersonales: paciente?.antecedentesPersonales || '',
     antecedentesFamiliares: paciente?.antecedentesFamiliares || '',
     alergias: paciente?.alergias || '',
@@ -42,6 +43,20 @@ function FormDatosClinicos({ paciente, onActualizado }) {
   return (
     <form onSubmit={handleSubmit} style={{background:'#fff',border:'1px solid #d0d7e2',borderRadius:'14px',boxShadow:'0 2px 8px #1976d220',padding:'1.5rem 2rem',margin:'2rem auto',maxWidth:700,marginBottom:'2.5rem',display:'flex',flexDirection:'column',gap:'1.1rem'}}>
       <h3 style={{color:'#1976d2',fontWeight:700,marginBottom:'0.7rem',fontSize:'1.1rem'}}>Editar datos clínicos básicos</h3>
+      <div style={{display:'flex',alignItems:'center',gap:'1rem'}}>
+        <label style={{fontWeight:'bold',color:'#333'}}>Tipo de sangre:</label>
+        <select name="tipoSangre" value={form.tipoSangre} onChange={handleChange} style={{padding:8,borderRadius:8,border:'1px solid #d0d7e2'}}>
+          <option value="">Selecciona</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+      </div>
       <textarea name="antecedentesPersonales" value={form.antecedentesPersonales} onChange={handleChange} placeholder="Antecedentes personales" rows={2} style={{padding:8,borderRadius:8,border:'1px solid #d0d7e2'}} />
       <textarea name="antecedentesFamiliares" value={form.antecedentesFamiliares} onChange={handleChange} placeholder="Antecedentes familiares" rows={2} style={{padding:8,borderRadius:8,border:'1px solid #d0d7e2'}} />
       <textarea name="alergias" value={form.alergias} onChange={handleChange} placeholder="Alergias" rows={2} style={{padding:8,borderRadius:8,border:'1px solid #d0d7e2'}} />

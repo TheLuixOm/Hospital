@@ -51,6 +51,7 @@ function Registros() {
           <FormDatosClinicos paciente={paciente} onActualizado={nuevo => { setPaciente(nuevo); setEditandoDatosClinicos(false); }} />
         ) : (
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.1rem'}}>
+            <div><b>Tipo de sangre:</b><br/>{paciente.tipoSangre || <span style={{color:'#aaa'}}>No registrado</span>}</div>
             <div><b>Antecedentes personales:</b><br/>{paciente.antecedentesPersonales || <span style={{color:'#aaa'}}>No registrado</span>}</div>
             <div><b>Antecedentes familiares:</b><br/>{paciente.antecedentesFamiliares || <span style={{color:'#aaa'}}>No registrado</span>}</div>
             <div><b>Alergias:</b><br/>{paciente.alergias || <span style={{color:'#aaa'}}>No registrado</span>}</div>

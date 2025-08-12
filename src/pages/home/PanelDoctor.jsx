@@ -79,6 +79,18 @@ function PanelDoctor({ onCerrarSesion }) {
           </button>
         </div>
 
+        <div style={styles.card}>
+          <FaStethoscope size={32} style={styles.icon} />
+          <h3>Configuración</h3>
+          <p>Cambia tu contraseña de acceso como doctor.</p>
+          <button
+            onClick={() => navigate('/doctor/configuracion')}
+            style={{marginTop:'0.5rem',padding:'0.5rem 1.5rem',borderRadius:'8px',border:'none',background:'#1976d2',color:'#fff',fontWeight:'bold'}}
+          >
+            Cambiar contraseña
+          </button>
+        </div>
+
         <div style={{ ...styles.card, backgroundColor: '#ffecec', cursor: 'pointer' }} onClick={handleCerrarSesion}>
           <FaSignOutAlt size={32} style={{ ...styles.icon, color: '#e74c3c' }} />
           <h3 style={{ color: '#e74c3c' }}>Cerrar Sesión</h3>
